@@ -135,7 +135,7 @@ const refreshWarehouses = async function () {
 
     const newTable = document.createElement('table')
     const headersElement = document.createElement('tr')
-    const headers = ["NOMBRE", "CANTIDAD", "TOTAL"]
+    const headers = ["NOMBRE", "OCUPADO", "TOTAL"]
     for (let i = 0; i < 3; i++){
         const header = document.createElement('th')
         header.innerHTML = headers[i]
@@ -151,9 +151,9 @@ const refreshWarehouses = async function () {
         nombre.innerHTML = warehouses[index].nombre;
         line.appendChild(nombre)
 
-        const cantidad = document.createElement('td');
-        cantidad.innerHTML = warehouses[index].cantidad;
-        line.appendChild(cantidad)
+        const ocupado = document.createElement('td');
+        ocupado.innerHTML = warehouses[index].ocupado;
+        line.appendChild(ocupado)
 
         const total = document.createElement('td');
         total.innerHTML = warehouses[index].total;
