@@ -6,24 +6,61 @@
     <title>Dashboard</title>
   </head>
 
+<style>
+    .dashboard {
+        background-color: #FBD603;
+    }
+    
+    .actions {
+    	background-color: #ABBAEA;
+    }
+</style>
 <body>
     <div>
-        <h1>Dashboard Taller de Integración</h1>
-        <div id="orders">
-            <h2>Orders</h2>
-            <button id="refresh_orders">Refresh Orders</button>
-            <button id="new_order">New order</button>
-            <div id="all_orders">No disponible</div>
+        <div class="dashboard">
+          <h1>Dashboard Taller de Integración</h1>
+          <div id="orders">
+              <h2>Orders</h2>
+              <button id="refresh_orders">Refresh Orders</button>
+              <button id="new_order">New order</button>
+              <div id="all_orders">No disponible</div>
+          </div>
+          <div id="stocks">
+              <h2>Stocks</h2>
+              <button id="refresh_stocks">Refresh Stock</button>
+              <div id="all_stocks">All Stocks</div>
+          </div>
+          <div id="warehouses">
+              <h2>Warehouse ocupation</h2>
+              <button id="refresh_warehouses">Refresh Warehouses</button>
+              <div id="all_warehouses">All Warehouses</div>
+          </div>
         </div>
-        <div id="stocks">
-            <h2>Stocks</h2>
-            <button id="refresh_stocks">Refresh Stock</button>
-            <div id="all_stocks">All Stocks</div>
-        </div>
-        <div id="warehouses">
-            <h2>Warehouse ocupation</h2>
-            <button id="refresh_warehouses">Refresh Warehouses</button>
-            <div id="all_warehouses">All Warehouses</div>
+        <div class="actions">
+          <h1>Acciones </h1>
+          <h2>Pedir (cantidad, SKU)</h2>
+          Cantidad: <input type="number" id="pedir-cantidad">
+          <br>
+          SKU: <select class="sku-opciones" id="pedir-sku"></select>
+          <br>
+          <button id="pedir">PEDIR</button>
+          <br>
+          <h2>Mover (cantidad, SKU, origen, destino)</h2>
+          Cantidad: <input type="number" id="mover-cantidad">
+          <br>
+          SKU: <select class="sku-opciones" id="mover-sku"></select>
+          <br>
+          Origen: <select class="almacen-opciones" id="mover-origen"></select>
+          <br>
+          Destino: <select class="almacen-opciones" id="mover-destino"></select>
+          <br>
+          <button id="mover">MOVER</button>
+          <br>
+          <h2>Cocinar (sku) </h2>
+          SKU: <select class="recipe-opciones" id="cocinar-sku"></select>
+          <br>
+          <button id="cocinar">Cocinar</button>
+
         </div>
     </div>
   <script type="module" src="dashboard.js"></script>
