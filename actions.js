@@ -1,6 +1,6 @@
 import { baseApi } from "./utils.js";
 
-const mover = function () {
+const mover = async function () {
 
     const ruta = "actions/move";
 
@@ -22,9 +22,11 @@ const mover = function () {
         destination: destino
     }
 
-    postData(`${baseApi}/${ruta}`, data).then(data => {
-      console.log(data); // JSON data parsed by `data.json()` call
+    const respuesta = await postData(`${baseApi}/${ruta}`, data)
+    .then(answer => {
+        return answer
     });
+    console.log(respuesta);
 
 }
 
@@ -41,23 +43,40 @@ const pedir = async function () {
         sku: parseInt(selected, 10), 
         quantity: parseInt(cantidad,10)
     }
+
     
-    const response = postData(`${baseApi}/${ruta}`, data);
-    console.log(response);
+    
+    const respuesta = await postData(`${baseApi}/${ruta}`, data)
+    .then(data => {
+        return data
+    });
+    console.log(respuesta);
 
 }
 
-const cocinar = function () {
+const cocinar = async function () {
 
     let sku = document.getElementById("cocinar-sku")
     let selected = sku.options[sku.selectedIndex].value
     
     console.log(`Cocinando sku ${selected}`);
 
-    // postData(`${baseApi}/${ruta}`, { sku: selected, quantity: cantidad})
-    // .then(data => {
-    //   console.log(data); // JSON data parsed by `data.json()` call
-    // });
+    const ruta = "actions/ask";
+
+    let cantidad = 1;
+
+    console.log(`Cocinando 1 cantidad del sku ${selected}`);
+    
+    const data = { 
+        sku: parseInt(selected, 10), 
+        quantity: parseInt(cantidad,10)
+    }
+    
+    const respuesta = await postData(`${baseApi}/${ruta}`, data)
+    .then(data => {
+        return data
+    });
+    console.log(respuesta);
 
 
 
@@ -65,7 +84,7 @@ const cocinar = function () {
 
 async function postData(url = '', data = {}) {
     // Opciones por defecto estan marcadas con un *
-    const response = await fetch(url, {
+    return fetch(url, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       mode: 'no-cors', // no-cors, *cors, same-origin
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -78,7 +97,6 @@ async function postData(url = '', data = {}) {
       referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
       body: JSON.stringify(data) // body data type must match "Content-Type" header
     });
-    return response.json(); // parses JSON response into native JavaScript objects
   }
   
   
