@@ -114,7 +114,7 @@ const fillDropDowns = function(){
   for(var i = 0; i < destinos.length; i++) {
     let select = destinos[i];
 
-    for (const val of Object.entries(groupsDev))
+    for (const val of Object.entries(groupsProd))
     {
         var option = document.createElement("option");
         option.value = val[1];
