@@ -1,5 +1,5 @@
-import { names, baseApi, compareNombres, warehousesNames, recipes, fillDropDowns } from "./utils.js"
-import { cocinar, mover, pedir } from "./actions.js";
+import { names, baseApi, compareNombres, warehousesNames, recipes, groups, fillDropDowns } from "./utils.js"
+import { cocinar, mover, pedir, despachar } from "./actions.js";
 const allOrders = document.getElementById('all_orders');
 const allStocks = document.getElementById('all_stocks');
 const allWarehouses = document.getElementById('all_warehouses');
@@ -13,6 +13,7 @@ const newOrderButton = document.getElementById('new_order');
 const cocinarButton = document.getElementById('cocinar');
 const moverButton = document.getElementById('mover');
 const pedirButton = document.getElementById('pedir');
+const despacharButton = document.getElementById('despachar');
 
 
 const refreshOrders = function () {
@@ -133,6 +134,7 @@ fillDropDowns();
 cocinarButton.onclick = cocinar;
 moverButton.onclick = mover;
 pedirButton.onclick = pedir;
+despacharButton.onclick = despachar;
 
 
 refreshOrdersButton.onclick = refreshOrders;
