@@ -1,16 +1,12 @@
 import { baseApi } from "./utils.js";
 
-let destinos_despacho = document.getElementById("despachar-destino");
-let destino_despacho =
-  destinos_despacho.options[destinos_despacho.selectedIndex].value;
-
 
 const despachar = async function () {
   const ruta = "actions/moveStorage";
 
   let cantidad = document.getElementById("despachar-cantidad").value;
-  let sku = document.getElementById("despachar-sku");
-  let selected = sku.options[sku.selectedIndex].value;
+  let skus = document.getElementById("despachar-sku");
+  let selected = skus.options[skus.selectedIndex].value;
   let destinos = document.getElementById("despachar-destino");
   let destino = destinos.options[destinos.selectedIndex].value;
 

@@ -1,4 +1,4 @@
-import { names, baseApi, compareNombres, warehousesNames, recipes, groups, fillDropDowns } from "./utils.js"
+import { names, baseApi, compareNombres, warehousesNames, recipes, groupsDev, groupsProd, fillDropDowns } from "./utils.js"
 import { cocinar, mover, pedir, despachar } from "./actions.js";
 const allOrders = document.getElementById('all_orders');
 const allStocks = document.getElementById('all_stocks');
@@ -37,14 +37,22 @@ const refreshStock = async function () {
     .then(data => {
         return data
     });
+
+    const detailed = await fetch(`${baseApi}/stocks/detailed-stocks`)
+    .then(response => response.json())
+    .then(data => {
+        return data
+    });
       
     console.log('stocks', stocks) 
+    console.log('detailed', detailed) 
+
     allStocks.innerHTML = ""; 
 
     const newTable = document.createElement('table')
     const headersElement = document.createElement('tr')
-    const headers = ["SKU", "NOMBRE", "TOTAL EN STOCK"]
-    for (let i=0; i<3; i++){
+    const headers = ["SKU", "NOMBRE", "TOTAL EN STOCK", "recepcion", "cocina", "despacho", "pulmon" ]
+    for (let i=0; i<7; i++){
         const header = document.createElement('th')
         header.innerHTML = headers[i]
         headersElement.appendChild(header)
@@ -72,6 +80,41 @@ const refreshStock = async function () {
             }
         }
         line.appendChild(total)
+
+        const recepcion = document.createElement('td');
+        recepcion.innerHTML = 0
+        if (detailed.recepcion[skus[index][0]]){
+            recepcion.innerHTML = detailed.recepcion[skus[index][0]]
+        }
+        line.appendChild(recepcion)
+
+        const cocina = document.createElement('td');
+        cocina.innerHTML = 0
+        if (detailed.cocina[skus[index][0]]){
+            cocina.innerHTML = detailed.cocina[skus[index][0]]
+        }
+        line.appendChild(cocina)
+
+        const despacho = document.createElement('td');
+        despacho.innerHTML = 0
+        if (detailed.despacho[skus[index][0]]){
+            despacho.innerHTML = detailed.despacho[skus[index][0]]
+        }
+        line.appendChild(despacho)
+
+        const pulmon = document.createElement('td');
+        pulmon.innerHTML = 0
+        if (detailed.pulmon[skus[index][0]]){
+            pulmon.innerHTML = detailed.pulmon[skus[index][0]]
+        }
+        line.appendChild(pulmon)
+
+        
+
+        
+
+
+
 
         newTable.appendChild(line)
 
