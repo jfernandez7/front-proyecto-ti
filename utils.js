@@ -4,11 +4,26 @@ const names = {
     15: "Levadura fresca",
     50: "Queso mozzarella granulado",
     60: "Pepperoni",
+    70: "Aceituna completa",
+    80: "Tomate entero",
+    90: "Jamón para pizza",
+    100: "Piña en conserva",
     1000: "Masa para pizza precocida familiar",
+    1001: "Masa para pizza precocida mediana",
+    1070: "Aceituna laminada",
+    1080: "Tomate picado",
+    1100: "Piña picada",
     5000: "Pizza pepperoni familiar",
+    5001: "Pizza pepperoni mediana",
+    5005: "Pizzas doble pepperoni familiar",
+    5006: "Pizzas doble pepperoni mediana",
+    5010: "Pizzas aceituna famiiar",
+    5011: "Pizza aceituna mediana",
+    5020: "Pizzas Hawaiana familiar",
     50005: "SKU GRUPO 5",
     50015: "SKU GRUPO 15"
 }
+
 
 const groupsDev = {
   "Grupo 1": "6167752d51533a0004922312",
@@ -53,7 +68,17 @@ const groupsProd = {
 
 const recipes = {
   1000: "Masa para pizza precocida familiar",
-  5000: "Pizza pepperoni familiar"
+  1001: "Masa para pizza precocida mediana",
+  1070: "Aceituna laminada",
+  1080: "Tomate picado",
+  1100: "Piña picada",
+  5000: "Pizza pepperoni familiar",
+  5001: "Pizza pepperoni mediana",
+  5005: "Pizzas doble pepperoni familiar",
+  5006: "Pizzas doble pepperoni mediana",
+  5010: "Pizzas aceituna famiiar",
+  5011: "Pizza aceituna mediana",
+  5020: "Pizzas Hawaiana familiar",
 }
 
 const warehousesNames = ["recepcion", "despacho", "pulmon", "cocina"]
@@ -69,6 +94,16 @@ function compareNombres( a, b ) {
     }
     return 0;
   }
+
+function compareStatus( a, b ) {
+  if ( a.status < b.status ){
+    return -1;
+  }
+  if ( a.status > b.status ){
+    return 1;
+  }
+  return 0;
+}
 
 const fillDropDowns = function(){
   var skus = document.getElementsByClassName("sku-opciones");
@@ -124,4 +159,4 @@ const fillDropDowns = function(){
   }
 }
 
-export {names, warehousesNames, baseApi, recipes, groupsDev, groupsProd, fillDropDowns, compareNombres}
+export {names, warehousesNames, baseApi, recipes, groupsDev, groupsProd, fillDropDowns, compareNombres, compareStatus}

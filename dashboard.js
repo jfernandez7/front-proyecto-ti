@@ -1,4 +1,4 @@
-import { names, baseApi, compareNombres, warehousesNames, recipes, groupsDev, groupsProd, fillDropDowns } from "./utils.js"
+import { names, baseApi, compareNombres, compareStatus, warehousesNames, recipes, groupsDev, groupsProd, fillDropDowns } from "./utils.js"
 import { cocinar, mover, pedir, despachar } from "./actions.js";
 const allOrders = document.getElementById('all_orders');
 const allStocks = document.getElementById('all_stocks');
@@ -8,7 +8,7 @@ const refreshOrdersButton = document.getElementById('refresh_orders');
 const refreshWarehousesButton = document.getElementById('refresh_warehouses');
 
 const refreshStocksButton = document.getElementById('refresh_stocks');
-const newOrderButton = document.getElementById('new_order');
+// const newOrderButton = document.getElementById('new_order');
 
 const cocinarButton = document.getElementById('cocinar');
 const moverButton = document.getElementById('mover');
@@ -20,12 +20,101 @@ const refreshOrders = function () {
 
     console.log('Actualizando ordenes');
 
-}
-const newOrder = function () {
+    const orders = await fetch(`${baseApi}/ordenes-compra`)
+    .then(response => response.json())
+    .then(data => {
+        return data
+    });
 
-    console.log('Creando nueva orden');
+    allOrders.innerHTML = ""; 
+
+    warehouses.sort(compareStatus);
+
+
+    const newTable = document.createElement('table')
+    const headersElement = document.createElement('tr')
+    const headers = ["id", "orderId", "client", "supplier", "sku", "deliveryDate", "quantity", "quantityDelivered", "urlNotification", "state", "channel", "cookedQuantity", "createdAt", "updatedAt" ]
+    for (let i=0; i<14; i++){
+        const header = document.createElement('th')
+        header.innerHTML = headers[i]
+        headersElement.appendChild(header)
+    }
+    newTable.appendChild(headersElement)
+
+    for (let index = 0; index < orders.length; index ++){
+        const line = document.createElement('tr');
+
+        const id = document.createElement('td');
+        sku.innerHTML = skus[index].id;
+        line.appendChild(id)
+
+        const orderId = document.createElement('td');
+        sku.innerHTML = skus[index].orderId;
+        line.appendChild(orderId)
+
+        const client = document.createElement('td');
+        sku.innerHTML = skus[index].client;
+        line.appendChild(client)
+
+        const supplier = document.createElement('td');
+        sku.innerHTML = skus[index].supplier;
+        line.appendChild(supplier)
+
+        const sku = document.createElement('td');
+        sku.innerHTML = skus[index].sku;
+        line.appendChild(sku)
+        
+        const deliveryDate = document.createElement('td');
+        sku.innerHTML = skus[index].deliveryDate;
+        line.appendChild(deliveryDate)
+        
+        const quantity = document.createElement('td');
+        sku.innerHTML = skus[index].quantity;
+        line.appendChild(quantity)
+        
+        const quantityDelivered = document.createElement('td');
+        sku.innerHTML = skus[index].quantityDelivered;
+        line.appendChild(quantityDelivered)
+        
+        const urlNotification = document.createElement('td');
+        sku.innerHTML = skus[index].urlNotification;
+        line.appendChild(urlNotification)
+        
+        const state = document.createElement('td');
+        sku.innerHTML = skus[index].state;
+        line.appendChild(state)
+        
+        const channel = document.createElement('td');
+        sku.innerHTML = skus[index].channel;
+        line.appendChild(channel)
+        
+        const cookedQuantity = document.createElement('td');
+        sku.innerHTML = skus[index].cookedQuantity;
+        line.appendChild(cookedQuantity)
+        
+        const createdAt = document.createElement('td');
+        sku.innerHTML = skus[index].createdAt;
+        line.appendChild(createdAt)
+        
+        const updatedAt = document.createElement('td');
+        sku.innerHTML = skus[index].updatedAt;
+        line.appendChild(updatedAt)
+
+
+        newTable.appendChild(line)
+
+    }
+    allOrders.appendChild(newTable)
 
 }
+
+
+
+// const newOrder = function () {
+
+//     console.log('Creando nueva orden');
+
+// }
 
 const refreshStock = async function () {
 
@@ -183,4 +272,4 @@ despacharButton.onclick = despachar;
 refreshOrdersButton.onclick = refreshOrders;
 refreshStocksButton.onclick = refreshStock;
 refreshWarehousesButton.onclick = refreshWarehouses;
-newOrderButton.onclick = newOrder;
+// newOrderButton.onclick = newOrder;
