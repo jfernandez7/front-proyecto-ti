@@ -83,7 +83,7 @@ const recipes = {
 
 const warehousesNames = ["recepcion", "despacho", "pulmon", "cocina"]
 
-const baseApi = 'https://doblequeso5.ing.puc.cl'
+const baseApi = 'http://127.0.0.1:8080'
 
 function compareNombres( a, b ) {
     if ( a.nombre < b.nombre ){
