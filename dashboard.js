@@ -28,7 +28,7 @@ const refreshOrders = async function () {
 
     allOrders.innerHTML = ""; 
 
-    warehouses.sort(compareStatus);
+    orders.sort(compareStatus);
 
 
     const newTable = document.createElement('table')
@@ -45,59 +45,59 @@ const refreshOrders = async function () {
         const line = document.createElement('tr');
 
         const id = document.createElement('td');
-        id.innerHTML = skus[index].id;
+        id.innerHTML = orders[index].id;
         line.appendChild(id)
 
         const orderId = document.createElement('td');
-        orderId.innerHTML = skus[index].orderId;
+        orderId.innerHTML = orders[index].orderId;
         line.appendChild(orderId)
 
         const client = document.createElement('td');
-        client.innerHTML = skus[index].client;
+        client.innerHTML = orders[index].client;
         line.appendChild(client)
 
         const supplier = document.createElement('td');
-        supplier.innerHTML = skus[index].supplier;
+        supplier.innerHTML = orders[index].supplier;
         line.appendChild(supplier)
 
         const sku = document.createElement('td');
-        sku.innerHTML = skus[index].sku;
+        sku.innerHTML = orders[index].sku;
         line.appendChild(sku)
         
         const deliveryDate = document.createElement('td');
-        deliveryDate.innerHTML = skus[index].deliveryDate;
+        deliveryDate.innerHTML = orders[index].deliveryDate;
         line.appendChild(deliveryDate)
         
         const quantity = document.createElement('td');
-        quantity.innerHTML = skus[index].quantity;
+        quantity.innerHTML = orders[index].quantity;
         line.appendChild(quantity)
         
         const quantityDelivered = document.createElement('td');
-        quantityDelivered.innerHTML = skus[index].quantityDelivered;
+        quantityDelivered.innerHTML = orders[index].quantityDelivered;
         line.appendChild(quantityDelivered)
         
         const urlNotification = document.createElement('td');
-        urlNotification.innerHTML = skus[index].urlNotification;
+        urlNotification.innerHTML = orders[index].urlNotification;
         line.appendChild(urlNotification)
         
         const state = document.createElement('td');
-        state.innerHTML = skus[index].state;
+        state.innerHTML = orders[index].state;
         line.appendChild(state)
         
         const channel = document.createElement('td');
-        channel.innerHTML = skus[index].channel;
+        channel.innerHTML = orders[index].channel;
         line.appendChild(channel)
         
         const cookedQuantity = document.createElement('td');
-        cookedQuantity.innerHTML = skus[index].cookedQuantity;
+        cookedQuantity.innerHTML = orders[index].cookedQuantity;
         line.appendChild(cookedQuantity)
         
         const createdAt = document.createElement('td');
-        createdAt.innerHTML = skus[index].createdAt;
+        createdAt.innerHTML = orders[index].createdAt;
         line.appendChild(createdAt)
         
         const updatedAt = document.createElement('td');
-        updatedAt.innerHTML = skus[index].updatedAt;
+        updatedAt.innerHTML = orders[index].updatedAt;
         line.appendChild(updatedAt)
 
 
