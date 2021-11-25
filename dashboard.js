@@ -1,10 +1,12 @@
 import { names, baseApi, compareNombres, compareStatus, warehousesNames, recipes, groupsDev, groupsProd, fillDropDowns } from "./utils.js"
 import { cocinar, despachar, pedir, moverAlmacenes, moverBodegas } from "./actions.js";
-const allOrders = document.getElementById('all_orders');
+const allOrdersInternal = document.getElementById('all_orders_internal');
+const allOrdersExternal = document.getElementById('all_orders_external');
 const allStocks = document.getElementById('all_stocks');
 const allWarehouses = document.getElementById('all_warehouses');
 
-const refreshOrdersButton = document.getElementById('refresh_orders');
+const refreshOrdersButton = document.getElementById('refresh_orders_internal');
+const refreshOrdersExternalButton = document.getElementById('refresh_orders_external');
 const refreshWarehousesButton = document.getElementById('refresh_warehouses');
 
 const refreshStocksButton = document.getElementById('refresh_stocks');
@@ -17,17 +19,111 @@ const pedirButton = document.getElementById('pedir');
 const despacharButton = document.getElementById('despachar');
 
 
-const refreshOrders = async function () {
+const refreshExternalOrders = async function () {
 
-    console.log('Actualizando ordenes');
+    console.log('Actualizando ordenes externas');
 
-    const orders = await fetch(`${baseApi}/ordenes-compra`)
+    const orders = await fetch(`${baseApi}/ordenes-compra/external`)
     .then(response => response.json())
     .then(data => {
         return data
     });
     console.log(orders);
-    allOrders.innerHTML = ""; 
+    allOrdersExternal.innerHTML = ""; 
+
+    orders.sort(compareStatus);
+
+
+    const newTable = document.createElement('table')
+    const headersElement = document.createElement('tr')
+    const headers = ["_id", "created_at", "updated_at", "cliente", "proveedor", "canal", "cantidad", "cantidadDespachada", "estado", "fechaDespachos", "fechaEntrega", "precioUnitario", "sku", "urlNotification"]
+    // const headers = ["id", "orderId", "client", "supplier", "sku", "deliveryDate", "quantity", "quantityDelivered", "urlNotification", "state", "channel", "cookedQuantity", "createdAt", "updatedAt", "inProcess" ]
+    for (let i=0; i<headers.length; i++){
+        const header = document.createElement('th')
+        header.innerHTML = headers[i]
+        headersElement.appendChild(header)
+    }
+    newTable.appendChild(headersElement)
+
+    for (let index = 0; index < orders.length; index ++){
+        const line = document.createElement('tr');
+
+        const id = document.createElement('td');
+        id.innerHTML = orders[index]._id;
+        line.appendChild(id)
+
+        const createdAt = document.createElement('td');
+        createdAt.innerHTML = orders[index].created_at;
+        line.appendChild(createdAt)
+        
+        const updatedAt = document.createElement('td');
+        updatedAt.innerHTML = orders[index].updated_at;
+        line.appendChild(updatedAt)
+
+        const client = document.createElement('td');
+        client.innerHTML = orders[index].cliente;
+        line.appendChild(client)
+
+        const supplier = document.createElement('td');
+        supplier.innerHTML = orders[index].proveedor;
+        line.appendChild(supplier)
+
+        const channel = document.createElement('td');
+        channel.innerHTML = orders[index].canal;
+        line.appendChild(channel)
+
+        const quantity = document.createElement('td');
+        quantity.innerHTML = orders[index].cantidad;
+        line.appendChild(quantity)
+
+        const quantityDelivered = document.createElement('td');
+        quantityDelivered.innerHTML = orders[index].cantidadDespachada;
+        line.appendChild(quantityDelivered)
+        
+        const state = document.createElement('td');
+        state.innerHTML = orders[index].estado;
+        line.appendChild(state)
+
+        const dispatchDate = document.createElement('td');
+        dispatchDate.innerHTML = orders[index].fechaDespachos;
+        line.appendChild(dispatchDate)
+
+        const price = document.createElement('td');
+        price.innerHTML = orders[index].precioUnitario;
+        line.appendChild(price)
+
+        const deliveryDate = document.createElement('td');
+        deliveryDate.innerHTML = orders[index].fechaEntrega;
+        line.appendChild(deliveryDate)
+        
+        const sku = document.createElement('td');
+        sku.innerHTML = orders[index].sku;
+        line.appendChild(sku)
+
+        const urlNotification = document.createElement('td');
+        urlNotification.innerHTML = orders[index].urlNotification;
+        line.appendChild(urlNotification)
+        
+
+        newTable.appendChild(line)
+
+    }
+    allOrdersExternal.appendChild(newTable)
+
+
+}
+
+const refreshOrders = async function () {
+
+    console.log('Actualizando ordenes internas');
+
+    const orders = await fetch(`${baseApi}/ordenes-compra/internal`)
+    .then(response => response.json())
+    .then(data => {
+        return data
+    });
+    console.log(orders);
+    allOrdersInternal.innerHTML = ""; 
 
     orders.sort(compareStatus);
 
@@ -110,7 +206,7 @@ const refreshOrders = async function () {
         newTable.appendChild(line)
 
     }
-    allOrders.appendChild(newTable)
+    allOrdersInternal.appendChild(newTable)
 
 }
 
@@ -284,6 +380,7 @@ despacharButton.onclick = despachar;
 
 
 refreshOrdersButton.onclick = refreshOrders;
+refreshOrdersExternalButton.onclick = refreshExternalOrders;
 refreshStocksButton.onclick = refreshStock;
 refreshWarehousesButton.onclick = refreshWarehouses;
 // newOrderButton.onclick = newOrder;
