@@ -26,7 +26,7 @@ const refreshOrders = async function () {
     .then(data => {
         return data
     });
-
+    console.log(orders);
     allOrders.innerHTML = ""; 
 
     orders.sort(compareStatus);
@@ -34,8 +34,9 @@ const refreshOrders = async function () {
 
     const newTable = document.createElement('table')
     const headersElement = document.createElement('tr')
-    const headers = ["id", "orderId", "client", "supplier", "sku", "deliveryDate", "quantity", "quantityDelivered", "urlNotification", "state", "channel", "cookedQuantity", "createdAt", "updatedAt" ]
-    for (let i=0; i<14; i++){
+    // const headers2 = ["_id", "created_at", "updated_at", "cliente", "proveedor", "canal", "cantidad", "cantidadDespachada", "estado", "fechaDespachos", "fechaEntrega", "precioUnitario", "sku", "urlNotification", "__v"]
+    const headers = ["id", "orderId", "client", "supplier", "sku", "deliveryDate", "quantity", "quantityDelivered", "urlNotification", "state", "channel", "cookedQuantity", "createdAt", "updatedAt", "inProcess" ]
+    for (let i=0; i<headers.length; i++){
         const header = document.createElement('th')
         header.innerHTML = headers[i]
         headersElement.appendChild(header)
@@ -101,6 +102,10 @@ const refreshOrders = async function () {
         updatedAt.innerHTML = orders[index].updatedAt;
         line.appendChild(updatedAt)
 
+        const inProcess = document.createElement('td');
+        inProcess.innerHTML = orders[index].inProcess;
+        line.appendChild(inProcess)
+
 
         newTable.appendChild(line)
 
@@ -141,8 +146,8 @@ const refreshStock = async function () {
 
     const newTable = document.createElement('table')
     const headersElement = document.createElement('tr')
-    const headers = ["SKU", "NOMBRE", "TOTAL EN STOCK", "recepcion", "cocina", "despacho", "pulmon" ]
-    for (let i=0; i<7; i++){
+    const headers = ["SKU", "NOMBRE", "TOTAL EN STOCK", "recepcion", "cocina", "despacho", "pulmon", "general" ]
+    for (let i=0; i<8; i++){
         const header = document.createElement('th')
         header.innerHTML = headers[i]
         headersElement.appendChild(header)
@@ -198,6 +203,13 @@ const refreshStock = async function () {
             pulmon.innerHTML = detailed.pulmon[skus[index][0]]
         }
         line.appendChild(pulmon)
+
+        const general = document.createElement('td');
+        general.innerHTML = 0
+        if (detailed.general[skus[index][0]]){
+            general.innerHTML = detailed.general[skus[index][0]]
+        }
+        line.appendChild(general)
 
         
 
