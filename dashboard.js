@@ -34,9 +34,13 @@ const refreshExternalOrders = async function () {
     orders.sort(compareStatus);
 
 
+    orders.sort(function(a,b){
+        return new Date(b.fechaEntrega) - new Date(a.fechaEntrega);
+    });
+
     const newTable = document.createElement('table')
     const headersElement = document.createElement('tr')
-    const headers = ["_id", "created_at", "updated_at", "cliente", "proveedor", "canal", "cantidad", "cantidadDespachada", "estado", "fechaDespachos", "fechaEntrega", "precioUnitario", "sku", "urlNotification"]
+    const headers = ["_id", "cliente", "proveedor", "canal", "cantidadDespachada", "estado", "fechaDespachos", "precioUnitario", "fechaEntrega", "sku",  "cantidad", "urlNotificacion"]
     // const headers = ["id", "orderId", "client", "supplier", "sku", "deliveryDate", "quantity", "quantityDelivered", "urlNotification", "state", "channel", "cookedQuantity", "createdAt", "updatedAt", "inProcess" ]
     for (let i=0; i<headers.length; i++){
         const header = document.createElement('th')
@@ -52,13 +56,13 @@ const refreshExternalOrders = async function () {
         id.innerHTML = orders[index]._id;
         line.appendChild(id)
 
-        const createdAt = document.createElement('td');
-        createdAt.innerHTML = orders[index].created_at;
-        line.appendChild(createdAt)
+        // const createdAt = document.createElement('td');
+        // createdAt.innerHTML = orders[index].created_at;
+        // line.appendChild(createdAt)
         
-        const updatedAt = document.createElement('td');
-        updatedAt.innerHTML = orders[index].updated_at;
-        line.appendChild(updatedAt)
+        // const updatedAt = document.createElement('td');
+        // updatedAt.innerHTML = orders[index].updated_at;
+        // line.appendChild(updatedAt)
 
         const client = document.createElement('td');
         client.innerHTML = orders[index].cliente;
@@ -71,10 +75,6 @@ const refreshExternalOrders = async function () {
         const channel = document.createElement('td');
         channel.innerHTML = orders[index].canal;
         line.appendChild(channel)
-
-        const quantity = document.createElement('td');
-        quantity.innerHTML = orders[index].cantidad;
-        line.appendChild(quantity)
 
         const quantityDelivered = document.createElement('td');
         quantityDelivered.innerHTML = orders[index].cantidadDespachada;
@@ -93,15 +93,20 @@ const refreshExternalOrders = async function () {
         line.appendChild(price)
 
         const deliveryDate = document.createElement('td');
-        deliveryDate.innerHTML = orders[index].fechaEntrega;
-        line.appendChild(deliveryDate)
+        var today  = new Date(orders[index].fechaEntrega);
+        deliveryDate.innerHTML = today.toLocaleString();
+        line.appendChild(deliveryDate);
         
         const sku = document.createElement('td');
         sku.innerHTML = orders[index].sku;
         line.appendChild(sku)
 
+        const quantity = document.createElement('td');
+        quantity.innerHTML = orders[index].cantidad;
+        line.appendChild(quantity)
+
         const urlNotification = document.createElement('td');
-        urlNotification.innerHTML = orders[index].urlNotification;
+        urlNotification.innerHTML = orders[index].urlNotificacion;
         line.appendChild(urlNotification)
         
 

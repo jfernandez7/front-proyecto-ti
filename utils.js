@@ -105,6 +105,16 @@ function compareStatus( a, b ) {
   return 0;
 }
 
+// function compareDate( a, b ) {
+//   if ( a.status < b.status ){
+//     return -1;
+//   }
+//   if ( a.status > b.status ){
+//     return 1;
+//   }
+//   return 0;
+// }
+
 const fillDropDowns = function(){
   var skus = document.getElementsByClassName("sku-opciones");
   var almacenes = document.getElementsByClassName("almacen-opciones");
