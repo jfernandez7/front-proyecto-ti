@@ -81,7 +81,7 @@ const recipes = {
   5020: "Pizzas Hawaiana familiar",
 }
 
-const warehousesNames = ["recepcion", "despacho", "pulmon", "cocina"]
+const warehousesNames = ["recepcion", "despacho", "pulmon", "cocina", "general"]
 
 const baseApi = 'http://127.0.0.1:8080'
 

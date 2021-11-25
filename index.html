@@ -50,7 +50,7 @@
           <br>
           <button id="pedir">PEDIR</button>
           <br>
-          <h2>Mover (cantidad, SKU, origen, destino)</h2>
+          <h2>Mover entre almacenes(cantidad, SKU, origen, destino)</h2>
           Cantidad: <input type="number" id="mover-cantidad">
           <br>
           SKU: <select class="sku-opciones" id="mover-sku"></select>
@@ -59,7 +59,7 @@
           <br>
           Destino: <select class="almacen-opciones" id="mover-destino"></select>
           <br>
-          <button id="mover">MOVER</button>
+          <button id="mover-almacenes">MOVER ALMACENES</button>
           <br>
           <h2>Cocinar (sku) </h2>
           SKU: <select class="recipe-opciones" id="cocinar-sku"></select>
@@ -67,12 +67,22 @@
           <button id="cocinar">Cocinar</button>
           <br>
           
-          <h2>Despachar (cantidad, SKU, destino)</h2>
+          <h2>Mover a bodega (cantidad, SKU, destino)</h2>
+          Cantidad: <input type="number" id="bodegas-cantidad">
+          <br>
+          SKU: <select class="sku-opciones" id="bodegas-sku"></select>
+          <br>
+          Destino: <select class="destino-opciones" id="bodegas-destino"></select>
+          <br>
+          <button id="mover-bodega">MOVER BODEGAS</button>
+          <br>
+          
+          <h2>Despachar (orderId, cantidad, SKU, direction, price)</h2>
           Cantidad: <input type="number" id="despachar-cantidad">
           <br>
           SKU: <select class="sku-opciones" id="despachar-sku"></select>
           <br>
-          Destino: <select class="destino-opciones" id="despachar-destino"></select>
+          OrdenId: <input type="number" id="despachar-order">
           <br>
           <button id="despachar">Despachar</button>
           <br>
