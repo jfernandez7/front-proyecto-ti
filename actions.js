@@ -1,13 +1,13 @@
 import { baseApi } from "./utils.js";
 
 
-const despachar = async function () {
+const moverBodegas = async function () {
   const ruta = "actions/moveStorage";
 
-  let cantidad = document.getElementById("despachar-cantidad").value;
-  let skus = document.getElementById("despachar-sku");
+  let cantidad = document.getElementById("bodegas-cantidad").value;
+  let skus = document.getElementById("bodegas-sku");
   let selected = skus.options[skus.selectedIndex].value;
-  let destinos = document.getElementById("despachar-destino");
+  let destinos = document.getElementById("bodegas-destino");
   let destino = destinos.options[destinos.selectedIndex].value;
 
   console.log(
@@ -28,7 +28,7 @@ const despachar = async function () {
   console.log(respuesta);
 };
 
-const mover = async function () {
+const moverAlmacenes = async function () {
   const ruta = "actions/move";
 
   let cantidad = document.getElementById("mover-cantidad").value;
@@ -100,6 +100,39 @@ const cocinar = async function () {
   console.log(respuesta);
 };
 
+
+const despachar = async function () {
+  let sku = document.getElementById("despachar-sku");
+  let selectedSku = sku.options[sku.selectedIndex].value;
+
+  let cantidad = document.getElementById("despachar-cantidad").value;
+  let orden = document.getElementById("despachar-order").value;
+
+
+  console.log(`Despachando ${cantidad} cantidad del sku ${selectedSku} de la ordenId ${orden}`);
+
+  const ruta = "actions/dispatchStorage";
+
+  let direction = "";
+  let price = 0;
+
+
+  const data = {
+    sku: parseInt(selectedSku, 10),
+    quantity: parseInt(cantidad, 10),
+    price: parseInt(price, 10),
+    direction: direction,
+    orderId: parseInt(orden, 10)
+  };
+
+  const respuesta = await postData(`${baseApi}/${ruta}`, data).then((data) => {
+    return data;
+  });
+  console.log(respuesta);
+};
+
+
+
 async function postData(url = "", data = {}) {
   // Opciones por defecto estan marcadas con un *
   return fetch(url, {
@@ -117,4 +150,4 @@ async function postData(url = "", data = {}) {
   });
 }
 
-export { cocinar, mover, pedir, despachar };
+export { cocinar, moverBodegas, pedir, moverAlmacenes , despachar};

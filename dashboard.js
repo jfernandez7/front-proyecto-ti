@@ -1,5 +1,5 @@
 import { names, baseApi, compareNombres, compareStatus, warehousesNames, recipes, groupsDev, groupsProd, fillDropDowns } from "./utils.js"
-import { cocinar, mover, pedir, despachar } from "./actions.js";
+import { cocinar, despachar, pedir, moverAlmacenes, moverBodegas } from "./actions.js";
 const allOrders = document.getElementById('all_orders');
 const allStocks = document.getElementById('all_stocks');
 const allWarehouses = document.getElementById('all_warehouses');
@@ -11,7 +11,8 @@ const refreshStocksButton = document.getElementById('refresh_stocks');
 // const newOrderButton = document.getElementById('new_order');
 
 const cocinarButton = document.getElementById('cocinar');
-const moverButton = document.getElementById('mover');
+const moverBodegaButton = document.getElementById('mover-bodega');
+const moverAlmacenButton = document.getElementById('mover-almacenes');
 const pedirButton = document.getElementById('pedir');
 const despacharButton = document.getElementById('despachar');
 
@@ -264,7 +265,8 @@ const refreshWarehouses = async function () {
 fillDropDowns();
 
 cocinarButton.onclick = cocinar;
-moverButton.onclick = mover;
+moverAlmacenButton.onclick = moverAlmacenes;
+moverBodegaButton.onclick = moverBodegas;
 pedirButton.onclick = pedir;
 despacharButton.onclick = despachar;
 
