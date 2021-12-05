@@ -4,21 +4,21 @@ const anularOrden = async function () {
   const ruta = "ordenes-compra/anular"
 
   let orderId = document.getElementById("anular-orderid").value
+  let razon = document.getElementById("anular-razon").value
 
-  console.log(`Anulando la orden de id ${orderId}`)
+  console.log(`Anulando la orden de id ${orderId} porque ${razon}`)
 
   const data = {
-    orderId: parseInt(orderId, 10),
+    id: parseInt(orderId, 10),
+    anulacion: razon
   };
-
-  // NO seguro que sea post
   const respuesta = await postData(`${baseApi}/${ruta}`, data).then(
     (answer) => {
       return answer;
     }
   );
   console.log(respuesta);
-
+  
 }
 
 
