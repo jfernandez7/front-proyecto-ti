@@ -146,6 +146,7 @@ const refreshOrders = async function () {
 
     for (let index = 0; index < orders.length; index ++){
         const line = document.createElement('tr');
+        const space = document.createElement('br');
 
         const id = document.createElement('td');
         id.innerHTML = orders[index].id;
@@ -192,7 +193,7 @@ const refreshOrders = async function () {
         line.appendChild(channel)
         
         const cookedQuantity = document.createElement('td');
-        cookedQuantity.innerHTML = orders[index].cookedQuantity;
+        cookedQuantity.innerHTML = JSON.stringify(orders[index].cookedQuantity);
         line.appendChild(cookedQuantity)
         
         const createdAt = document.createElement('td');
@@ -209,7 +210,7 @@ const refreshOrders = async function () {
 
 
         newTable.appendChild(line)
-
+        newTable.appendChild(space)
     }
     allOrdersInternal.appendChild(newTable)
 
