@@ -30,17 +30,19 @@
     <div>
         <div class="dashboard">
           <h1>Dashboard Taller de Integración</h1>
-          <div id="orders" class="orders">
+          <div id="orders" >
               <h2>Orders (internal) </h2>
-              <button id="refresh_orders_internal">Refresh internal orders</button>
+              <button id="refresh_orders_internal">Load/Refresh orders</button>
+              <button id="filter_orders_internal">Filter accepted inProcess</button>
+              <button id="unfilter_orders_internal">Show all Orders</button>
               <!-- <button id="new_order">New order</button> -->
-              <div id="all_orders_internal">No disponible</div>
+              <div id="all_orders_internal" class="orders">No disponible</div>
           </div>
-          <div id="external-oc" class="orders">
+          <div id="external-oc" >
             <h2>Orders (external) </h2>
             <button id="refresh_orders_external">Refresh external orders</button>
             <!-- <button id="new_order">New order</button> -->
-            <div id="all_orders_external">No disponible</div>
+            <div id="all_orders_external" class="orders">No disponible</div>
         </div>
           <div id="stocks">
               <h2>Stocks</h2>
@@ -55,6 +57,11 @@
         </div>
         <div class="actions">
           <h1>Acciones </h1>
+          <h2>Anular/Cancelar Orden (orderId)</h2>
+          orderId: <input type="number" id="anular-orderid">
+          <br>
+          <button id="anular">ANULAR</button>
+          <br>
           <h2>Pedir (cantidad, SKU)</h2>
           Cantidad: <input type="number" id="pedir-cantidad">
           <br>

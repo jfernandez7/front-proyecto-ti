@@ -1,5 +1,26 @@
 import { baseApi } from "./utils.js";
 
+const anularOrden = async function () {
+  const ruta = "ordenes-compra/anular"
+
+  let orderId = document.getElementById("anular-orderid").value
+
+  console.log(`Anulando la orden de id ${orderId}`)
+
+  const data = {
+    orderId: parseInt(orderId, 10),
+  };
+
+  // NO seguro que sea post
+  const respuesta = await postData(`${baseApi}/${ruta}`, data).then(
+    (answer) => {
+      return answer;
+    }
+  );
+  console.log(respuesta);
+
+}
+
 
 const moverBodegas = async function () {
   const ruta = "actions/moveStorage";
@@ -150,4 +171,4 @@ async function postData(url = "", data = {}) {
   });
 }
 
-export { cocinar, moverBodegas, pedir, moverAlmacenes , despachar};
+export { cocinar, moverBodegas, pedir, moverAlmacenes , despachar, anularOrden};
