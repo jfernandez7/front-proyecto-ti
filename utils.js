@@ -151,6 +151,22 @@ const fillDropDowns = function () {
   var recetas = document.getElementsByClassName("recipe-opciones");
   var destinos = document.getElementsByClassName("destino-opciones");
   var skuChicas = document.getElementsByClassName("sku-opciones-chicas");
+  var groups = document.getElementsByClassName("group-opciones")
+
+
+  // Groups
+
+  for (var i = 0; i < groups.length; i++) {
+    let select = groups[i];
+
+    for (let groupNumber = 1; groupNumber <= 17 ; groupNumber ++) {
+      var option = document.createElement("option");
+      option.value = groupNumber;
+      option.text = `group ${groupNumber}`;
+      select.appendChild(option);
+    }
+  }
+
 
   for (var i = 0; i < skuChicas.length; i++) {
     let select = skuChicas[i];

@@ -1,15 +1,17 @@
 import { names, baseApi, compareNombres, compareStatus, warehousesNames, recipes, groupsDev, groupsProd, fillDropDowns } from "./utils.js"
-import { cocinar, despachar, pedir, moverAlmacenes, moverBodegas, anularOrden } from "./actions.js";
+import { cocinar, despachar, pedir, moverAlmacenes, moverBodegas, anularOrden , cambiarRanking} from "./actions.js";
 const allOrdersInternal = document.getElementById('all_orders_internal');
 const allOrdersExternal = document.getElementById('all_orders_external');
 const allStocks = document.getElementById('all_stocks');
 const allWarehouses = document.getElementById('all_warehouses');
+const allGroups = document.getElementById('all_groups');
 
 const refreshOrdersButton = document.getElementById('refresh_orders_internal');
 const refreshOrdersExternalButton = document.getElementById('refresh_orders_external');
 const refreshWarehousesButton = document.getElementById('refresh_warehouses');
 
 const refreshStocksButton = document.getElementById('refresh_stocks');
+const refreshGroupsButton = document.getElementById('refresh_groups')
 // const newOrderButton = document.getElementById('new_order');
 
 const anularButton = document.getElementById('anular');
@@ -18,6 +20,7 @@ const moverBodegaButton = document.getElementById('mover-bodega');
 const moverAlmacenButton = document.getElementById('mover-almacenes');
 const pedirButton = document.getElementById('pedir');
 const despacharButton = document.getElementById('despachar');
+const rankingButton = document.getElementById('ranking');
 
 const filtrarOrdenesButton = document.getElementById('filter_orders_internal');
 const desfiltrarOrdenesButton = document.getElementById('unfilter_orders_internal');
@@ -36,6 +39,60 @@ const unfilterOrders = function() {
     allOrdersInternal.appendChild(allOrdersTable)
 }
 
+const refreshGroups = async function () {
+    console.log("Actualizando grupos")
+    
+    const groups = await fetch(`${baseApi}/groups`)
+    .then(response => response.json())
+    .then(data => {
+        return data
+    });
+      
+    console.log('groups', groups) 
+    allGroups.innerHTML = ""; 
+
+    const newTable = document.createElement('table')
+    const headersElement = document.createElement('tr')
+    const headers = ["groupNumber", "ranking", "url", "idReception", "idOc"]
+    for (let i = 0; i < headers.length; i++){
+        const header = document.createElement('th')
+        header.innerHTML = headers[i]
+        headersElement.appendChild(header)
+    }
+
+    newTable.appendChild(headersElement)
+    for (let index = 0; index < groups.length; index ++){
+        console.log(groups[index])
+        const line = document.createElement('tr');
+
+        const number = document.createElement('td');
+        number.innerHTML = groups[index].groupNumber;
+        line.appendChild(number)
+
+        const ranking = document.createElement('td');
+        ranking.innerHTML = warehouses[index].ranking;
+        line.appendChild(ranking)
+
+        const url = document.createElement('td');
+        url.innerHTML = warehouses[index].url;
+        line.appendChild(url)
+
+        const idReception = document.createElement('td');
+        idReception.innerHTML = warehouses[index].idReception;
+        line.appendChild(idReception)
+
+        const idOc = document.createElement('td');
+        idOc.innerHTML = warehouses[index].idOc;
+        line.appendChild(idOc)
+
+        newTable.appendChild(line)
+
+    }
+    allGroups.appendChild(newTable)
+
+
+
+}
 
 const refreshExternalOrders = async function () {
 
@@ -149,7 +206,7 @@ const refreshOrders = async function () {
 
     const partialHeadersElement = document.createElement('tr')
 
-    const headers = ["id", "orderId", "state", "inProcess", "sku", "quantity", "quantityDelivered", "cookedQuantity", "createdAt", "updatedAt", "deliveryDate", "urlNotification", "channel", "client", "supplier"]
+    const headers = ["id", "orderId", "state", "inProcess", "createdByUs", "sku", "quantity", "quantityDelivered", "cookedQuantity", "createdAt", "updatedAt", "deliveryDate", "urlNotification", "channel", "client", "supplier"]
 
     for (let i=0; i<headers.length; i++){
         const header = document.createElement('th')
@@ -181,6 +238,10 @@ const refreshOrders = async function () {
         let inProcess = document.createElement('td');
         inProcess.innerHTML = orders[index].inProcess;
         line.appendChild(inProcess)
+
+        let createdByUs = document.createElement('td');
+        createdByUs.innerHTML = orders[index].createdByUs;
+        line.appendChild(createdByUs)
 
         let sku = document.createElement('td');
         sku.innerHTML = orders[index].sku;
@@ -476,13 +537,14 @@ moverAlmacenButton.onclick = moverAlmacenes;
 moverBodegaButton.onclick = moverBodegas;
 pedirButton.onclick = pedir;
 despacharButton.onclick = despachar;
+rankingButton.onclick = cambiarRanking;
 
 
 refreshOrdersButton.onclick = refreshOrders;
 refreshOrdersExternalButton.onclick = refreshExternalOrders;
 refreshStocksButton.onclick = refreshStock;
 refreshWarehousesButton.onclick = refreshWarehouses;
-
+refreshGroupsButton.onclick = refreshGroups;
 filtrarOrdenesButton.onclick = filterOrders;
 desfiltrarOrdenesButton.onclick = unfilterOrders;
 

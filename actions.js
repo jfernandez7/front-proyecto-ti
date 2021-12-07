@@ -21,6 +21,31 @@ const anularOrden = async function () {
   
 }
 
+const cambiarRanking = async function () {
+  const ruta = "groups/ranking"
+
+  let groupNumbers = document.getElementById("ranking-group");
+  let selected = groupNumbers.options[groupNumbers.selectedIndex].value;
+
+  let cantidad = document.getElementById("ranking-cantidad").value
+
+  console.log(`Actualizando el ranking  del grupo ${selected} al nuevo valor de  ${cantidad}`)
+
+  const data = {
+    groupId: parseInt(selected, 10),
+    newRanking: parseInt(cantidad, 10)
+  };
+  const respuesta = await postData(`${baseApi}/${ruta}`, data).then(
+    (answer) => {
+      return answer;
+    }
+  );
+  console.log(respuesta);
+  
+}
+
+
+
 
 const moverBodegas = async function () {
   const ruta = "actions/moveStorage";
@@ -171,4 +196,4 @@ async function postData(url = "", data = {}) {
   });
 }
 
-export { cocinar, moverBodegas, pedir, moverAlmacenes , despachar, anularOrden};
+export { cocinar, moverBodegas, pedir, moverAlmacenes , despachar, anularOrden, cambiarRanking};
