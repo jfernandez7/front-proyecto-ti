@@ -112,8 +112,8 @@ const warehousesNames = [
   "general",
 ];
 
-// const baseApi = "http://127.0.0.1:8080";
-const baseApi = "https://doblequeso5.ing.puc.cl";
+const baseApi = "http://127.0.0.1:8080";
+// const baseApi = "https://doblequeso5.ing.puc.cl";
 
 function compareNombres(a, b) {
   if (a.nombre < b.nombre) {
@@ -135,6 +135,16 @@ function compareStatus(a, b) {
   return 0;
 }
 
+function compareGroups(a, b) {
+  if (a.groupNumber < b.groupNumber) {
+    return -1;
+  }
+  if (a.groupNumber > b.groupNumber) {
+    return 1;
+  }
+  return 0;
+}
+
 // function compareDate( a, b ) {
 //   if ( a.status < b.status ){
 //     return -1;
@@ -151,6 +161,35 @@ const fillDropDowns = function () {
   var recetas = document.getElementsByClassName("recipe-opciones");
   var destinos = document.getElementsByClassName("destino-opciones");
   var skuChicas = document.getElementsByClassName("sku-opciones-chicas");
+  var groups = document.getElementsByClassName("group-opciones")
+  var filter = document.getElementsByClassName("filter-opciones");
+
+
+  // Groups
+
+  for (var i = 0; i < groups.length; i++) {
+    let select = groups[i];
+
+    for (let groupNumber = 1; groupNumber <= 17 ; groupNumber ++) {
+      var option = document.createElement("option");
+      option.value = groupNumber;
+      option.text = `group ${groupNumber}`;
+      select.appendChild(option);
+    }
+  }
+
+  // Filters
+  const opciones = ["B2B todo", "FTP todo", "B2B aceptadas inProcess", "FTP aceptadas inProcess", "Todo aceptadas inProcess", "Todas"]
+  for (var i = 0; i < filter.length; i++) {
+    let select = filter[i];
+
+    for (let i = 0; i < opciones.length ; i ++) {
+      var option = document.createElement("option");
+      option.value = opciones[i];
+      option.text = opciones[i];
+      select.appendChild(option);
+    }
+  }
 
   for (var i = 0; i < skuChicas.length; i++) {
     let select = skuChicas[i];
@@ -216,4 +255,5 @@ export {
   fillDropDowns,
   compareNombres,
   compareStatus,
+  compareGroups,
 };

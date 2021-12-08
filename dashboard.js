@@ -1,15 +1,17 @@
-import { names, baseApi, compareNombres, compareStatus, warehousesNames, recipes, groupsDev, groupsProd, fillDropDowns } from "./utils.js"
-import { cocinar, despachar, pedir, moverAlmacenes, moverBodegas, anularOrden } from "./actions.js";
+import { names, baseApi, compareNombres, compareStatus, warehousesNames, recipes, groupsDev, groupsProd, fillDropDowns, compareGroups } from "./utils.js"
+import { cocinar, despachar, pedir, moverAlmacenes, moverBodegas, anularOrden , cambiarRanking} from "./actions.js";
 const allOrdersInternal = document.getElementById('all_orders_internal');
 const allOrdersExternal = document.getElementById('all_orders_external');
 const allStocks = document.getElementById('all_stocks');
 const allWarehouses = document.getElementById('all_warehouses');
+const allGroups = document.getElementById('all_groups');
 
 const refreshOrdersButton = document.getElementById('refresh_orders_internal');
 const refreshOrdersExternalButton = document.getElementById('refresh_orders_external');
 const refreshWarehousesButton = document.getElementById('refresh_warehouses');
 
 const refreshStocksButton = document.getElementById('refresh_stocks');
+const refreshGroupsButton = document.getElementById('refresh_groups')
 // const newOrderButton = document.getElementById('new_order');
 
 const anularButton = document.getElementById('anular');
@@ -18,24 +20,82 @@ const moverBodegaButton = document.getElementById('mover-bodega');
 const moverAlmacenButton = document.getElementById('mover-almacenes');
 const pedirButton = document.getElementById('pedir');
 const despacharButton = document.getElementById('despachar');
+const rankingButton = document.getElementById('ranking');
 
-const filtrarOrdenesButton = document.getElementById('filter_orders_internal');
-const desfiltrarOrdenesButton = document.getElementById('unfilter_orders_internal');
+// const filtrarOrdenesButton = document.getElementById('filter_orders_internal');
+// const desfiltrarOrdenesButton = document.getElementById('unfilter_orders_internal');
 
+let ordersTotal;
 
 let allOrdersTable = document.createElement('table');
 let inProcessOrdersTable = document.createElement('table');
 
-const filterOrders = function() {
-    allOrdersInternal.innerHTML = ""
-    allOrdersInternal.appendChild(inProcessOrdersTable)
-}
 
-const unfilterOrders = function() {
-    allOrdersInternal.innerHTML = ""
-    allOrdersInternal.appendChild(allOrdersTable)
-}
 
+// const filterOrders = function() {
+//     allOrdersInternal.innerHTML = ""
+//     allOrdersInternal.appendChild(inProcessOrdersTable)
+// }
+
+// const unfilterOrders = function() {
+//     allOrdersInternal.innerHTML = ""
+//     allOrdersInternal.appendChild(allOrdersTable)
+// }
+
+const refreshGroups = async function () {
+    console.log("Actualizando grupos")
+    
+    const groups = await fetch(`${baseApi}/groups`)
+    .then(response => response.json())
+    .then(data => {
+        return data
+    });
+    groups.sort(compareGroups);
+    console.log('groups', groups) 
+    allGroups.innerHTML = ""; 
+
+    const newTable = document.createElement('table')
+    const headersElement = document.createElement('tr')
+    const headers = ["groupNumber", "ranking", "url", "idReception", "idOc"]
+    for (let i = 0; i < headers.length; i++){
+        const header = document.createElement('th')
+        header.innerHTML = headers[i]
+        headersElement.appendChild(header)
+    }
+
+    newTable.appendChild(headersElement)
+    for (let index = 0; index < groups.length; index ++){
+        console.log(groups[index])
+        const line = document.createElement('tr');
+
+        const number = document.createElement('td');
+        number.innerHTML = groups[index].groupNumber;
+        line.appendChild(number)
+
+        const ranking = document.createElement('td');
+        ranking.innerHTML = groups[index].ranking;
+        line.appendChild(ranking)
+
+        const url = document.createElement('td');
+        url.innerHTML = groups[index].url;
+        line.appendChild(url)
+
+        const idReception = document.createElement('td');
+        idReception.innerHTML = groups[index].idReception;
+        line.appendChild(idReception)
+
+        const idOc = document.createElement('td');
+        idOc.innerHTML = groups[index].idOc;
+        line.appendChild(idOc)
+
+        newTable.appendChild(line)
+
+    }
+    allGroups.appendChild(newTable)
+
+
+
+}
 
 const refreshExternalOrders = async function () {
 
@@ -128,20 +188,38 @@ const refreshExternalOrders = async function () {
 
 }
 
-const refreshOrders = async function () {
+const filterOrders = async function () {
 
-    console.log('Actualizando ordenes internas');
+    const opciones = ["B2B todo", "FTP todo", "B2B aceptadas inProcess", "FTP aceptadas inProcess", "Todo aceptadas inProcess", "Todas"]
 
-    const orders = await fetch(`${baseApi}/ordenes-compra/internal`)
+
+    const ordersRequest = await fetch(`${baseApi}/ordenes-compra/internal`)
     .then(response => response.json())
     .then(data => {
         return data
     });
-    console.log(orders);
+    console.log(ordersRequest);
+
+    let filter = document.getElementById("orders-filter");
+    let selectedFilter = filter.options[filter.selectedIndex].value;
+  
+    let orders = ordersRequest;
+
+    if (selectedFilter == opciones[0]){
+        orders = orders.filter((order) => order.channel == "b2b")
+    } else if (selectedFilter == opciones[1]){
+        orders = orders.filter((order) => order.channel == "ftp")
+    } else if (selectedFilter == opciones[2]){
+        orders = orders.filter((order) => order.channel == "b2b" && order.state == "aceptada" && order.inProcess == true)
+    } else if (selectedFilter == opciones[3]){
+        orders = orders.filter((order) => order.channel == "ftb" && order.state == "aceptada" && order.inProcess == true)
+    } else if (selectedFilter == opciones[4]){
+        orders = orders.filter((order) => order.state == "aceptada" && order.inProcess == true)
+    }
+
     allOrdersInternal.innerHTML = ""; 
 
     orders.sort(compareStatus);
-
 
     const newTable = document.createElement('table')
     const partialTable = document.createElement('table')
@@ -149,7 +227,7 @@ const refreshOrders = async function () {
 
     const partialHeadersElement = document.createElement('tr')
 
-    const headers = ["id", "orderId", "state", "inProcess", "sku", "quantity", "quantityDelivered", "cookedQuantity", "createdAt", "updatedAt", "deliveryDate", "urlNotification", "channel", "client", "supplier"]
+    const headers = ["id", "orderId", "state", "inProcess", "createdByUs", "sku", "quantity", "quantityDelivered", "cookedQuantity", "createdAt", "updatedAt", "deliveryDate", "urlNotification", "channel", "client", "supplier"]
 
     for (let i=0; i<headers.length; i++){
         const header = document.createElement('th')
@@ -181,6 +259,10 @@ const refreshOrders = async function () {
         let inProcess = document.createElement('td');
         inProcess.innerHTML = orders[index].inProcess;
         line.appendChild(inProcess)
+
+        let createdByUs = document.createElement('td');
+        createdByUs.innerHTML = orders[index].createdByUs;
+        line.appendChild(createdByUs)
 
         let sku = document.createElement('td');
         sku.innerHTML = orders[index].sku;
@@ -230,83 +312,199 @@ const refreshOrders = async function () {
         line.appendChild(supplier)
 
         newTable.appendChild(line)
-
-        if (orders[index].state == "aceptada" && orders[index].inProcess == true){
-            line = document.createElement('tr');
-
-            id = document.createElement('td');
-            id.innerHTML = orders[index].id;
-            line.appendChild(id)
-
-            orderId = document.createElement('td');
-            orderId.innerHTML = orders[index].orderId;
-            line.appendChild(orderId)
-
-            state = document.createElement('td');
-            state.innerHTML = orders[index].state;
-            line.appendChild(state)
-
-            inProcess = document.createElement('td');
-            inProcess.innerHTML = orders[index].inProcess;
-            line.appendChild(inProcess)
-
-            sku = document.createElement('td');
-            sku.innerHTML = orders[index].sku;
-            line.appendChild(sku)
-            
-            quantity = document.createElement('td');
-            quantity.innerHTML = orders[index].quantity;
-            line.appendChild(quantity)
-            
-            quantityDelivered = document.createElement('td');
-            quantityDelivered.innerHTML = orders[index].quantityDelivered;
-            line.appendChild(quantityDelivered)
-
-            cookedQuantity = document.createElement('td');
-            cookedQuantity.innerHTML = JSON.stringify(orders[index].cookedQuantity);
-            line.appendChild(cookedQuantity)
-
-            createdAt = document.createElement('td');
-            let day  = new Date(orders[index].createdAt);
-            createdAt.innerHTML = day.toLocaleString();
-            line.appendChild(createdAt)
-            
-            updatedAt = document.createElement('td');
-            day = new Date(orders[index].updatedAt);
-            updatedAt.innerHTML = day.toLocaleString();
-            line.appendChild(updatedAt)
-            
-            deliveryDate = document.createElement('td');
-            day = new Date(orders[index].deliveryDate);
-            deliveryDate.innerHTML = day.toLocaleString();
-            line.appendChild(deliveryDate)
-
-            urlNotification = document.createElement('td');
-            urlNotification.innerHTML = orders[index].urlNotification;
-            line.appendChild(urlNotification)
-            
-            channel = document.createElement('td');
-            channel.innerHTML = orders[index].channel;
-            line.appendChild(channel)
-        
-            client = document.createElement('td');
-            client.innerHTML = orders[index].client;
-            line.appendChild(client)
-
-            supplier = document.createElement('td');
-            supplier.innerHTML = orders[index].supplier;
-            line.appendChild(supplier)
-
-
-            partialTable.appendChild(line)
-        }
-        
     }
+    
     allOrdersInternal.appendChild(newTable)
-    allOrdersTable = newTable;
-    inProcessOrdersTable = partialTable;
+
+
+
+
 
 }
+
+// const refreshOrders = async function () {
+
+//     console.log('Actualizando ordenes internas');
+
+//     const orders = await fetch(`${baseApi}/ordenes-compra/internal`)
+//     .then(response => response.json())
+//     .then(data => {
+//         return data
+//     });
+//     console.log(orders);
+//     allOrdersInternal.innerHTML = ""; 
+
+//     orders.sort(compareStatus);
+
+
+//     const newTable = document.createElement('table')
+//     const partialTable = document.createElement('table')
+//     const headersElement = document.createElement('tr')
+
+//     const partialHeadersElement = document.createElement('tr')
+
+//     const headers = ["id", "orderId", "state", "inProcess", "createdByUs", "sku", "quantity", "quantityDelivered", "cookedQuantity", "createdAt", "updatedAt", "deliveryDate", "urlNotification", "channel", "client", "supplier"]
+
+//     for (let i=0; i<headers.length; i++){
+//         const header = document.createElement('th')
+//         header.innerHTML = headers[i]
+//         headersElement.appendChild(header)
+
+//         const header2 = document.createElement('th')
+//         header2.innerHTML = headers[i]
+//         partialHeadersElement.appendChild(header2)
+//     }
+//     newTable.appendChild(headersElement)
+//     partialTable.appendChild(partialHeadersElement)
+
+//     for (let index = 0; index < orders.length; index ++){
+//         let line = document.createElement('tr');
+
+//         let id = document.createElement('td');
+//         id.innerHTML = orders[index].id;
+//         line.appendChild(id)
+
+//         let orderId = document.createElement('td');
+//         orderId.innerHTML = orders[index].orderId;
+//         line.appendChild(orderId)
+
+//         let state = document.createElement('td');
+//         state.innerHTML = orders[index].state;
+//         line.appendChild(state)
+
+//         let inProcess = document.createElement('td');
+//         inProcess.innerHTML = orders[index].inProcess;
+//         line.appendChild(inProcess)
+
+//         let createdByUs = document.createElement('td');
+//         createdByUs.innerHTML = orders[index].createdByUs;
+//         line.appendChild(createdByUs)
+
+//         let sku = document.createElement('td');
+//         sku.innerHTML = orders[index].sku;
+//         line.appendChild(sku)
+        
+//         let quantity = document.createElement('td');
+//         quantity.innerHTML = orders[index].quantity;
+//         line.appendChild(quantity)
+        
+//         let quantityDelivered = document.createElement('td');
+//         quantityDelivered.innerHTML = orders[index].quantityDelivered;
+//         line.appendChild(quantityDelivered)
+
+//         let cookedQuantity = document.createElement('td');
+//         cookedQuantity.innerHTML = JSON.stringify(orders[index].cookedQuantity);
+//         line.appendChild(cookedQuantity)
+
+//         let createdAt = document.createElement('td');
+//         let day  = new Date(orders[index].createdAt);
+//         createdAt.innerHTML = day.toLocaleString();
+//         line.appendChild(createdAt)
+        
+//         let updatedAt = document.createElement('td');
+//         day = new Date(orders[index].updatedAt);
+//         updatedAt.innerHTML = day.toLocaleString();
+//         line.appendChild(updatedAt)
+        
+//         let deliveryDate = document.createElement('td');
+//         day = new Date(orders[index].deliveryDate);
+//         deliveryDate.innerHTML = day.toLocaleString();
+//         line.appendChild(deliveryDate)
+
+//         let urlNotification = document.createElement('td');
+//         urlNotification.innerHTML = orders[index].urlNotification;
+//         line.appendChild(urlNotification)
+        
+//         let channel = document.createElement('td');
+//         channel.innerHTML = orders[index].channel;
+//         line.appendChild(channel)
+    
+//         let client = document.createElement('td');
+//         client.innerHTML = orders[index].client;
+//         line.appendChild(client)
+
+//         let supplier = document.createElement('td');
+//         supplier.innerHTML = orders[index].supplier;
+//         line.appendChild(supplier)
+
+//         newTable.appendChild(line)
+
+//         if (orders[index].state == "aceptada" && orders[index].inProcess == true){
+//             line = document.createElement('tr');
+
+//             id = document.createElement('td');
+//             id.innerHTML = orders[index].id;
+//             line.appendChild(id)
+
+//             orderId = document.createElement('td');
+//             orderId.innerHTML = orders[index].orderId;
+//             line.appendChild(orderId)
+
+//             state = document.createElement('td');
+//             state.innerHTML = orders[index].state;
+//             line.appendChild(state)
+
+//             inProcess = document.createElement('td');
+//             inProcess.innerHTML = orders[index].inProcess;
+//             line.appendChild(inProcess)
+
+//             sku = document.createElement('td');
+//             sku.innerHTML = orders[index].sku;
+//             line.appendChild(sku)
+            
+//             quantity = document.createElement('td');
+//             quantity.innerHTML = orders[index].quantity;
+//             line.appendChild(quantity)
+            
+//             quantityDelivered = document.createElement('td');
+//             quantityDelivered.innerHTML = orders[index].quantityDelivered;
+//             line.appendChild(quantityDelivered)
+
+//             cookedQuantity = document.createElement('td');
+//             cookedQuantity.innerHTML = JSON.stringify(orders[index].cookedQuantity);
+//             line.appendChild(cookedQuantity)
+
+//             createdAt = document.createElement('td');
+//             let day  = new Date(orders[index].createdAt);
+//             createdAt.innerHTML = day.toLocaleString();
+//             line.appendChild(createdAt)
+            
+//             updatedAt = document.createElement('td');
+//             day = new Date(orders[index].updatedAt);
+//             updatedAt.innerHTML = day.toLocaleString();
+//             line.appendChild(updatedAt)
+            
+//             deliveryDate = document.createElement('td');
+//             day = new Date(orders[index].deliveryDate);
+//             deliveryDate.innerHTML = day.toLocaleString();
+//             line.appendChild(deliveryDate)
+
+//             urlNotification = document.createElement('td');
+//             urlNotification.innerHTML = orders[index].urlNotification;
+//             line.appendChild(urlNotification)
+            
+//             channel = document.createElement('td');
+//             channel.innerHTML = orders[index].channel;
+//             line.appendChild(channel)
+        
+//             client = document.createElement('td');
+//             client.innerHTML = orders[index].client;
+//             line.appendChild(client)
+
+//             supplier = document.createElement('td');
+//             supplier.innerHTML = orders[index].supplier;
+//             line.appendChild(supplier)
+
+
+//             partialTable.appendChild(line)
+//         }
+        
+//     }
+//     allOrdersInternal.appendChild(newTable)
+//     allOrdersTable = newTable;
+//     inProcessOrdersTable = partialTable;
+
+// }
 
 
 
@@ -476,14 +674,15 @@ moverAlmacenButton.onclick = moverAlmacenes;
 moverBodegaButton.onclick = moverBodegas;
 pedirButton.onclick = pedir;
 despacharButton.onclick = despachar;
+rankingButton.onclick = cambiarRanking;
 
 
-refreshOrdersButton.onclick = refreshOrders;
+refreshOrdersButton.onclick = filterOrders;
 refreshOrdersExternalButton.onclick = refreshExternalOrders;
 refreshStocksButton.onclick = refreshStock;
 refreshWarehousesButton.onclick = refreshWarehouses;
-
-filtrarOrdenesButton.onclick = filterOrders;
-desfiltrarOrdenesButton.onclick = unfilterOrders;
+refreshGroupsButton.onclick = refreshGroups;
+// filtrarOrdenesButton.onclick = filterOrders;
+// desfiltrarOrdenesButton.onclick = unfilterOrders;
 
 // newOrderButton.onclick = newOrder;

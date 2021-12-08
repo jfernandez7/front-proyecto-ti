@@ -1,7 +1,7 @@
 import { baseApi } from "./utils.js";
 
 const anularOrden = async function () {
-  const ruta = "ordenes-compra/anular"
+  const ruta = "ordenes-compra/anular/orden"
 
   let orderId = document.getElementById("anular-orderid").value
   let razon = document.getElementById("anular-razon").value
@@ -9,7 +9,7 @@ const anularOrden = async function () {
   console.log(`Anulando la orden de id ${orderId} porque ${razon}`)
 
   const data = {
-    id: parseInt(orderId, 10),
+    id: orderId,
     anulacion: razon
   };
   const respuesta = await postData(`${baseApi}/${ruta}`, data).then(
@@ -20,6 +20,31 @@ const anularOrden = async function () {
   console.log(respuesta);
   
 }
+
+const cambiarRanking = async function () {
+  const ruta = "groups/ranking"
+
+  let groupNumbers = document.getElementById("ranking-group");
+  let selected = groupNumbers.options[groupNumbers.selectedIndex].value;
+
+  let cantidad = document.getElementById("ranking-cantidad").value
+
+  console.log(`Actualizando el ranking  del grupo ${selected} al nuevo valor de  ${cantidad}`)
+
+  const data = {
+    groupId: parseInt(selected, 10),
+    newRanking: parseInt(cantidad, 10)
+  };
+  const respuesta = await postData(`${baseApi}/${ruta}`, data).then(
+    (answer) => {
+      return answer;
+    }
+  );
+  console.log(respuesta);
+  
+}
+
+
 
 
 const moverBodegas = async function () {
@@ -171,4 +196,4 @@ async function postData(url = "", data = {}) {
   });
 }
 
-export { cocinar, moverBodegas, pedir, moverAlmacenes , despachar, anularOrden};
+export { cocinar, moverBodegas, pedir, moverAlmacenes , despachar, anularOrden, cambiarRanking};

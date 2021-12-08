@@ -32,18 +32,14 @@
           <h1>Dashboard Taller de Integración</h1>
           <div id="orders" >
               <h2>Orders (internal) </h2>
-              <button id="refresh_orders_internal">Load/Refresh orders</button>
-              <button id="filter_orders_internal">Filter accepted inProcess</button>
-              <button id="unfilter_orders_internal">Show all Orders</button>
+              FILTRO: <select class="filter-opciones" id="orders-filter"></select>
+
+              <button id="refresh_orders_internal">Load</button>
+              <!-- <button id="filter_orders_internal">Filter accepted inProcess</button>
+              <button id="unfilter_orders_internal">Show all Orders</button> -->
               <!-- <button id="new_order">New order</button> -->
-              <div id="all_orders_internal" class="orders">No disponible</div>
+              <div id="all_orders_internal" class="orders">Orders</div>
           </div>
-          <div id="external-oc" >
-            <h2>Orders (external) </h2>
-            <button id="refresh_orders_external">Refresh external orders</button>
-            <!-- <button id="new_order">New order</button> -->
-            <div id="all_orders_external" class="orders">No disponible</div>
-        </div>
           <div id="stocks">
               <h2>Stocks</h2>
               <button id="refresh_stocks">Refresh Stock</button>
@@ -54,11 +50,22 @@
               <button id="refresh_warehouses">Refresh Warehouses</button>
               <div id="all_warehouses">All Warehouses</div>
           </div>
+          <div id="groups">
+            <h2>Groups information</h2>
+            <button id="refresh_groups">Refresh Groups</button>
+            <div id="all_groups">All Groups</div>
+        </div>
+        <div id="external-oc" >
+          <h2>Orders (external) </h2>
+          <button id="refresh_orders_external">Refresh external orders</button>
+          <!-- <button id="new_order">New order</button> -->
+          <div id="all_orders_external" class="orders">Orders</div>
+      </div>
         </div>
         <div class="actions">
           <h1>Acciones </h1>
           <h2>Anular/Cancelar Orden (orderId)</h2>
-          orderId: <input type="number" id="anular-orderid">
+          orderId: <input type="text" id="anular-orderid">
           <br>
           Razon de anulacion: <input type="text" id="anular-razon">
           <br>
@@ -106,6 +113,15 @@
           OrdenId: <input type="number" id="despachar-order">
           <br>
           <button id="despachar">Despachar</button>
+          <br>
+          <br>
+          
+          <h2>Cambiar Ranking (groupId, newRanking)</h2>
+          Cantidad: <input type="number" id="ranking-cantidad">
+          <br>
+          Group: <select class="group-opciones" id="ranking-group"></select>
+          <br>
+          <button id="ranking">Cambiar Ranking</button>
           <br>
         </div>
     </div>
