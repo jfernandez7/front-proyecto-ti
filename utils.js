@@ -112,8 +112,8 @@ const warehousesNames = [
   "general",
 ];
 
-// const baseApi = "http://127.0.0.1:8080";
-const baseApi = "https://doblequeso5.ing.puc.cl";
+const baseApi = "http://127.0.0.1:8080";
+// const baseApi = "https://doblequeso5.ing.puc.cl";
 
 function compareNombres(a, b) {
   if (a.nombre < b.nombre) {
@@ -130,6 +130,16 @@ function compareStatus(a, b) {
     return -1;
   }
   if (a.status > b.status) {
+    return 1;
+  }
+  return 0;
+}
+
+function compareGroups(a, b) {
+  if (a.groupNumber < b.groupNumber) {
+    return -1;
+  }
+  if (a.groupNumber > b.groupNumber) {
     return 1;
   }
   return 0;
@@ -245,4 +255,5 @@ export {
   fillDropDowns,
   compareNombres,
   compareStatus,
+  compareGroups,
 };

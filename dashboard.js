@@ -1,4 +1,4 @@
-import { names, baseApi, compareNombres, compareStatus, warehousesNames, recipes, groupsDev, groupsProd, fillDropDowns } from "./utils.js"
+import { names, baseApi, compareNombres, compareStatus, warehousesNames, recipes, groupsDev, groupsProd, fillDropDowns, compareGroups } from "./utils.js"
 import { cocinar, despachar, pedir, moverAlmacenes, moverBodegas, anularOrden , cambiarRanking} from "./actions.js";
 const allOrdersInternal = document.getElementById('all_orders_internal');
 const allOrdersExternal = document.getElementById('all_orders_external');
@@ -50,7 +50,7 @@ const refreshGroups = async function () {
     .then(data => {
         return data
     });
-      
+    groups.sort(compareGroups);
     console.log('groups', groups) 
     allGroups.innerHTML = ""; 
 
@@ -73,19 +73,19 @@ const refreshGroups = async function () {
         line.appendChild(number)
 
         const ranking = document.createElement('td');
-        ranking.innerHTML = warehouses[index].ranking;
+        ranking.innerHTML = groups[index].ranking;
         line.appendChild(ranking)
 
         const url = document.createElement('td');
-        url.innerHTML = warehouses[index].url;
+        url.innerHTML = groups[index].url;
         line.appendChild(url)
 
         const idReception = document.createElement('td');
-        idReception.innerHTML = warehouses[index].idReception;
+        idReception.innerHTML = groups[index].idReception;
         line.appendChild(idReception)
 
         const idOc = document.createElement('td');
-        idOc.innerHTML = warehouses[index].idOc;
+        idOc.innerHTML = groups[index].idOc;
         line.appendChild(idOc)
 
         newTable.appendChild(line)
