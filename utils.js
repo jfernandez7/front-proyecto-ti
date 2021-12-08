@@ -152,6 +152,7 @@ const fillDropDowns = function () {
   var destinos = document.getElementsByClassName("destino-opciones");
   var skuChicas = document.getElementsByClassName("sku-opciones-chicas");
   var groups = document.getElementsByClassName("group-opciones")
+  var filter = document.getElementsByClassName("filter-opciones");
 
 
   // Groups
@@ -167,6 +168,18 @@ const fillDropDowns = function () {
     }
   }
 
+  // Filters
+  const opciones = ["B2B todo", "FTP todo", "B2B aceptadas inProcess", "FTP aceptadas inProcess", "Todo aceptadas inProcess", "Todas"]
+  for (var i = 0; i < filter.length; i++) {
+    let select = filter[i];
+
+    for (let i = 0; i < opciones.length ; i ++) {
+      var option = document.createElement("option");
+      option.value = opciones[i];
+      option.text = opciones[i];
+      select.appendChild(option);
+    }
+  }
 
   for (var i = 0; i < skuChicas.length; i++) {
     let select = skuChicas[i];
