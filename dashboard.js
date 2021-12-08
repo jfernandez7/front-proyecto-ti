@@ -1,18 +1,19 @@
-import { names, baseApi, compareNombres, compareStatus, warehousesNames, recipes, groupsDev, groupsProd, fillDropDowns, compareGroups } from "./utils.js"
-import { cocinar, despachar, pedir, moverAlmacenes, moverBodegas, anularOrden , cambiarRanking} from "./actions.js";
+import { names, baseApi, compareNombres, compareStatus, compareKey, warehousesNames, recipes, groupsDev, groupsProd, fillDropDowns, compareGroups } from "./utils.js"
+import { cocinar, despachar, pedir, moverAlmacenes, moverBodegas, anularOrden , cambiarRanking, cambiarParametro} from "./actions.js";
 const allOrdersInternal = document.getElementById('all_orders_internal');
 const allOrdersExternal = document.getElementById('all_orders_external');
 const allStocks = document.getElementById('all_stocks');
 const allWarehouses = document.getElementById('all_warehouses');
 const allGroups = document.getElementById('all_groups');
+const allParameters = document.getElementById('all_parameters');
 
 const refreshOrdersButton = document.getElementById('refresh_orders_internal');
 const refreshOrdersExternalButton = document.getElementById('refresh_orders_external');
 const refreshWarehousesButton = document.getElementById('refresh_warehouses');
+const refreshParametersButton = document.getElementById('refresh_parameters');
 
 const refreshStocksButton = document.getElementById('refresh_stocks');
 const refreshGroupsButton = document.getElementById('refresh_groups')
-// const newOrderButton = document.getElementById('new_order');
 
 const anularButton = document.getElementById('anular');
 const cocinarButton = document.getElementById('cocinar');
@@ -21,26 +22,50 @@ const moverAlmacenButton = document.getElementById('mover-almacenes');
 const pedirButton = document.getElementById('pedir');
 const despacharButton = document.getElementById('despachar');
 const rankingButton = document.getElementById('ranking');
-
-// const filtrarOrdenesButton = document.getElementById('filter_orders_internal');
-// const desfiltrarOrdenesButton = document.getElementById('unfilter_orders_internal');
-
-let ordersTotal;
-
-let allOrdersTable = document.createElement('table');
-let inProcessOrdersTable = document.createElement('table');
+const cambiarParametroButton = document.getElementById('parameter')
 
 
+const refreshParameters = async function () {
+    console.log("Actualizando parametros")
+    
+    const parametros = await fetch(`${baseApi}/actions/params`)
+    .then(response => response.json())
+    .then(data => {
+        return data
+    });
 
-// const filterOrders = function() {
-//     allOrdersInternal.innerHTML = ""
-//     allOrdersInternal.appendChild(inProcessOrdersTable)
-// }
+    parametros.sort(compareKey);
+    console.log('params', parametros) 
+    allParameters.innerHTML = ""; 
 
-// const unfilterOrders = function() {
-//     allOrdersInternal.innerHTML = ""
-//     allOrdersInternal.appendChild(allOrdersTable)
-// }
+    const newTable = document.createElement('table')
+    const headersElement = document.createElement('tr')
+    const headers = ["Key", "value"]
+    for (let i = 0; i < headers.length; i++){
+        const header = document.createElement('th')
+        header.innerHTML = headers[i]
+        headersElement.appendChild(header)
+    }
+    newTable.appendChild(headersElement)
+
+    for (let index = 0; index < parametros.length; index ++){
+        const line = document.createElement('tr');
+
+        const key = document.createElement('td');
+        key.innerHTML = parametros[index].key;
+        line.appendChild(key)
+
+        const value = document.createElement('td');
+        value.innerHTML = parametros[index].value;
+        line.appendChild(value)
+
+        newTable.appendChild(line)
+
+    }
+    allParameters.appendChild(newTable)
+
+}
+
 
 const refreshGroups = async function () {
     console.log("Actualizando grupos")
@@ -92,8 +117,6 @@ const refreshGroups = async function () {
 
     }
     allGroups.appendChild(newTable)
-
-
 
 }
 
@@ -322,6 +345,190 @@ const filterOrders = async function () {
 
 }
 
+
+const refreshStock = async function () {
+
+    console.log('Actualizando stock');
+
+
+    const stocks = await fetch(`${baseApi}/stocks`)
+    .then(response => response.json())
+    .then(data => {
+        return data
+    });
+
+    const detailed = await fetch(`${baseApi}/stocks/detailed-stocks`)
+    .then(response => response.json())
+    .then(data => {
+        return data
+    });
+      
+    console.log('stocks', stocks) 
+    console.log('detailed', detailed) 
+
+    allStocks.innerHTML = ""; 
+
+    const newTable = document.createElement('table')
+    const headersElement = document.createElement('tr')
+    const headers = ["SKU", "NOMBRE", "TOTAL EN STOCK", "recepcion", "cocina", "despacho", "pulmon", "general" ]
+    for (let i=0; i<8; i++){
+        const header = document.createElement('th')
+        header.innerHTML = headers[i]
+        headersElement.appendChild(header)
+    }
+    newTable.appendChild(headersElement)
+    const skus = Object.entries(names)
+    
+
+    for (let index = 0; index < skus.length; index ++){
+        const line = document.createElement('tr');
+
+        const sku = document.createElement('td');
+        sku.innerHTML = skus[index][0];
+        line.appendChild(sku)
+
+        const nombre = document.createElement('td');
+        nombre.innerHTML = skus[index][1];
+        line.appendChild(nombre)
+
+        const total = document.createElement('td');
+        total.innerHTML = 0
+        for (let i = 0; i < stocks.length; i++){
+            if (stocks[i].sku == skus[index][0]){
+                total.innerHTML = stocks[i].total
+            }
+        }
+        line.appendChild(total)
+
+        const recepcion = document.createElement('td');
+        recepcion.innerHTML = 0
+        if (detailed.recepcion[skus[index][0]]){
+            recepcion.innerHTML = detailed.recepcion[skus[index][0]]
+        }
+        line.appendChild(recepcion)
+
+        const cocina = document.createElement('td');
+        cocina.innerHTML = 0
+        if (detailed.cocina[skus[index][0]]){
+            cocina.innerHTML = detailed.cocina[skus[index][0]]
+        }
+        line.appendChild(cocina)
+
+        const despacho = document.createElement('td');
+        despacho.innerHTML = 0
+        if (detailed.despacho[skus[index][0]]){
+            despacho.innerHTML = detailed.despacho[skus[index][0]]
+        }
+        line.appendChild(despacho)
+
+        const pulmon = document.createElement('td');
+        pulmon.innerHTML = 0
+        if (detailed.pulmon[skus[index][0]]){
+            pulmon.innerHTML = detailed.pulmon[skus[index][0]]
+        }
+        line.appendChild(pulmon)
+
+        const general = document.createElement('td');
+        general.innerHTML = 0
+        if (detailed.general[skus[index][0]]){
+            general.innerHTML = detailed.general[skus[index][0]]
+        }
+        line.appendChild(general)
+
+        newTable.appendChild(line)
+
+    }
+    allStocks.appendChild(newTable)
+
+}
+
+const refreshWarehouses = async function () {
+
+    console.log('Actualizando warehouses');
+    
+    const warehouses = await fetch(`${baseApi}/ocupacion-dashboard`)
+    .then(response => response.json())
+    .then(data => {
+        return data
+    });
+
+    warehouses.sort(compareNombres);
+      
+    console.log('ocupacion', warehouses) 
+    allWarehouses.innerHTML = ""; 
+
+    const newTable = document.createElement('table')
+    const headersElement = document.createElement('tr')
+    const headers = ["NOMBRE", "OCUPADO", "TOTAL"]
+    for (let i = 0; i < 3; i++){
+        const header = document.createElement('th')
+        header.innerHTML = headers[i]
+        headersElement.appendChild(header)
+    }
+
+    newTable.appendChild(headersElement)
+    for (let index = 0; index < warehouses.length; index ++){
+        console.log(warehouses[index])
+        const line = document.createElement('tr');
+
+        const nombre = document.createElement('td');
+        nombre.innerHTML = warehouses[index].nombre;
+        line.appendChild(nombre)
+
+        const ocupado = document.createElement('td');
+        ocupado.innerHTML = warehouses[index].ocupado;
+        line.appendChild(ocupado)
+
+        const total = document.createElement('td');
+        total.innerHTML = warehouses[index].total;
+        line.appendChild(total)
+
+        newTable.appendChild(line)
+
+    }
+    allWarehouses.appendChild(newTable)
+
+}
+
+
+fillDropDowns();
+
+anularButton.onclick = anularOrden
+cocinarButton.onclick = cocinar;
+moverAlmacenButton.onclick = moverAlmacenes;
+moverBodegaButton.onclick = moverBodegas;
+pedirButton.onclick = pedir;
+despacharButton.onclick = despachar;
+rankingButton.onclick = cambiarRanking;
+cambiarParametroButton.onclick = cambiarParametro;
+
+
+refreshOrdersButton.onclick = filterOrders;
+refreshOrdersExternalButton.onclick = refreshExternalOrders;
+refreshStocksButton.onclick = refreshStock;
+refreshWarehousesButton.onclick = refreshWarehouses;
+refreshGroupsButton.onclick = refreshGroups;
+refreshParametersButton.onclick = refreshParameters;
+
+
+
+// const newOrderButton = document.getElementById('new_order');
+// const filtrarOrdenesButton = document.getElementById('filter_orders_internal');
+// const desfiltrarOrdenesButton = document.getElementById('unfilter_orders_internal');
+// let ordersTotal;
+// let allOrdersTable = document.createElement('table');
+// let inProcessOrdersTable = document.createElement('table');
+
+// const filterOrders = function() {
+//     allOrdersInternal.innerHTML = ""
+//     allOrdersInternal.appendChild(inProcessOrdersTable)
+// }
+
+// const unfilterOrders = function() {
+//     allOrdersInternal.innerHTML = ""
+//     allOrdersInternal.appendChild(allOrdersTable)
+// }
+
 // const refreshOrders = async function () {
 
 //     console.log('Actualizando ordenes internas');
@@ -514,175 +721,8 @@ const filterOrders = async function () {
 
 // }
 
-const refreshStock = async function () {
-
-    console.log('Actualizando stock');
 
 
-    const stocks = await fetch(`${baseApi}/stocks`)
-    .then(response => response.json())
-    .then(data => {
-        return data
-    });
-
-    const detailed = await fetch(`${baseApi}/stocks/detailed-stocks`)
-    .then(response => response.json())
-    .then(data => {
-        return data
-    });
-      
-    console.log('stocks', stocks) 
-    console.log('detailed', detailed) 
-
-    allStocks.innerHTML = ""; 
-
-    const newTable = document.createElement('table')
-    const headersElement = document.createElement('tr')
-    const headers = ["SKU", "NOMBRE", "TOTAL EN STOCK", "recepcion", "cocina", "despacho", "pulmon", "general" ]
-    for (let i=0; i<8; i++){
-        const header = document.createElement('th')
-        header.innerHTML = headers[i]
-        headersElement.appendChild(header)
-    }
-    newTable.appendChild(headersElement)
-    const skus = Object.entries(names)
-    
-
-    for (let index = 0; index < skus.length; index ++){
-        const line = document.createElement('tr');
-
-        const sku = document.createElement('td');
-        sku.innerHTML = skus[index][0];
-        line.appendChild(sku)
-
-        const nombre = document.createElement('td');
-        nombre.innerHTML = skus[index][1];
-        line.appendChild(nombre)
-
-        const total = document.createElement('td');
-        total.innerHTML = 0
-        for (let i = 0; i < stocks.length; i++){
-            if (stocks[i].sku == skus[index][0]){
-                total.innerHTML = stocks[i].total
-            }
-        }
-        line.appendChild(total)
-
-        const recepcion = document.createElement('td');
-        recepcion.innerHTML = 0
-        if (detailed.recepcion[skus[index][0]]){
-            recepcion.innerHTML = detailed.recepcion[skus[index][0]]
-        }
-        line.appendChild(recepcion)
-
-        const cocina = document.createElement('td');
-        cocina.innerHTML = 0
-        if (detailed.cocina[skus[index][0]]){
-            cocina.innerHTML = detailed.cocina[skus[index][0]]
-        }
-        line.appendChild(cocina)
-
-        const despacho = document.createElement('td');
-        despacho.innerHTML = 0
-        if (detailed.despacho[skus[index][0]]){
-            despacho.innerHTML = detailed.despacho[skus[index][0]]
-        }
-        line.appendChild(despacho)
-
-        const pulmon = document.createElement('td');
-        pulmon.innerHTML = 0
-        if (detailed.pulmon[skus[index][0]]){
-            pulmon.innerHTML = detailed.pulmon[skus[index][0]]
-        }
-        line.appendChild(pulmon)
-
-        const general = document.createElement('td');
-        general.innerHTML = 0
-        if (detailed.general[skus[index][0]]){
-            general.innerHTML = detailed.general[skus[index][0]]
-        }
-        line.appendChild(general)
-
-        
-
-        
-
-
-
-
-        newTable.appendChild(line)
-
-    }
-    allStocks.appendChild(newTable)
-
-}
-
-const refreshWarehouses = async function () {
-
-    console.log('Actualizando warehouses');
-    
-    const warehouses = await fetch(`${baseApi}/ocupacion-dashboard`)
-    .then(response => response.json())
-    .then(data => {
-        return data
-    });
-
-    warehouses.sort(compareNombres);
-      
-    console.log('ocupacion', warehouses) 
-    allWarehouses.innerHTML = ""; 
-
-    const newTable = document.createElement('table')
-    const headersElement = document.createElement('tr')
-    const headers = ["NOMBRE", "OCUPADO", "TOTAL"]
-    for (let i = 0; i < 3; i++){
-        const header = document.createElement('th')
-        header.innerHTML = headers[i]
-        headersElement.appendChild(header)
-    }
-
-    newTable.appendChild(headersElement)
-    for (let index = 0; index < warehouses.length; index ++){
-        console.log(warehouses[index])
-        const line = document.createElement('tr');
-
-        const nombre = document.createElement('td');
-        nombre.innerHTML = warehouses[index].nombre;
-        line.appendChild(nombre)
-
-        const ocupado = document.createElement('td');
-        ocupado.innerHTML = warehouses[index].ocupado;
-        line.appendChild(ocupado)
-
-        const total = document.createElement('td');
-        total.innerHTML = warehouses[index].total;
-        line.appendChild(total)
-
-        newTable.appendChild(line)
-
-    }
-    allWarehouses.appendChild(newTable)
-
-}
-
-
-fillDropDowns();
-
-anularButton.onclick = anularOrden
-cocinarButton.onclick = cocinar;
-moverAlmacenButton.onclick = moverAlmacenes;
-moverBodegaButton.onclick = moverBodegas;
-pedirButton.onclick = pedir;
-despacharButton.onclick = despachar;
-rankingButton.onclick = cambiarRanking;
-
-
-refreshOrdersButton.onclick = filterOrders;
-refreshOrdersExternalButton.onclick = refreshExternalOrders;
-refreshStocksButton.onclick = refreshStock;
-refreshWarehousesButton.onclick = refreshWarehouses;
-refreshGroupsButton.onclick = refreshGroups;
 // filtrarOrdenesButton.onclick = filterOrders;
 // desfiltrarOrdenesButton.onclick = unfilterOrders;
-
 // newOrderButton.onclick = newOrder;

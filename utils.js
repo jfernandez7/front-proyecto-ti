@@ -107,6 +107,10 @@ const recipes = {
   5010: "Pizzas aceituna famiiar",
   5011: "Pizza aceituna mediana",
   5020: "Pizzas Hawaiana familiar",
+  5021: "Pizzas Hawaiana mediana",
+  5030: "Pizza vegana familiar",
+  5031: "Pizza vegana mediana",
+
 };
 
 const warehousesNames = [
@@ -125,6 +129,16 @@ function compareNombres(a, b) {
     return -1;
   }
   if (a.nombre > b.nombre) {
+    return 1;
+  }
+  return 0;
+}
+
+function compareKey(a, b) {
+  if (a.key < b.key) {
+    return -1;
+  }
+  if (a.key > b.key) {
     return 1;
   }
   return 0;
@@ -160,7 +174,7 @@ function compareGroups(a, b) {
 //   return 0;
 // }
 
-const fillDropDowns = function () {
+const fillDropDowns = async function () {
   var skus = document.getElementsByClassName("sku-opciones");
   var almacenes = document.getElementsByClassName("almacen-opciones");
   var recetas = document.getElementsByClassName("recipe-opciones");
@@ -168,10 +182,10 @@ const fillDropDowns = function () {
   var skuChicas = document.getElementsByClassName("sku-opciones-chicas");
   var groups = document.getElementsByClassName("group-opciones")
   var filter = document.getElementsByClassName("filter-opciones");
+  var parameters = document.getElementsByClassName("parameter-opciones")
 
 
   // Groups
-
   for (var i = 0; i < groups.length; i++) {
     let select = groups[i];
 
@@ -196,6 +210,7 @@ const fillDropDowns = function () {
     }
   }
 
+  // Sku chicas
   for (var i = 0; i < skuChicas.length; i++) {
     let select = skuChicas[i];
     for (const val of Object.entries(commodities)) {
@@ -206,6 +221,7 @@ const fillDropDowns = function () {
     }
   }
 
+  // Sku
   for (var i = 0; i < skus.length; i++) {
     let select = skus[i];
 
@@ -217,6 +233,7 @@ const fillDropDowns = function () {
     }
   }
 
+  // Recetas
   for (var i = 0; i < recetas.length; i++) {
     let select = recetas[i];
     for (const val of Object.entries(recipes)) {
@@ -227,6 +244,7 @@ const fillDropDowns = function () {
     }
   }
 
+  // Almacenes 
   for (var i = 0; i < almacenes.length; i++) {
     let select = almacenes[i];
 
@@ -238,6 +256,7 @@ const fillDropDowns = function () {
     }
   }
 
+  // Destinos
   for (var i = 0; i < destinos.length; i++) {
     let select = destinos[i];
 
@@ -248,6 +267,26 @@ const fillDropDowns = function () {
       select.appendChild(option);
     }
   }
+
+  const allParameters = await fetch(`${baseApi}/actions/params`)
+  .then(response => response.json())
+  .then(data => {
+      return data
+  });
+
+  // const allParameters = [{"key": "uno"},{"key": "dos"},{"key": "tres"}]
+  // Parameters
+  for (var i = 0; i < parameters.length; i++) {
+    let select = parameters[i];
+
+    for (let i = 0; i < allParameters.length ; i ++) {
+      var option = document.createElement("option");
+      option.value = allParameters[i].key;
+      option.text = allParameters[i].key;
+      select.appendChild(option);
+    }
+  }
+
 };
 
 export {
@@ -261,4 +300,5 @@ export {
   compareNombres,
   compareStatus,
   compareGroups,
+  compareKey
 };

@@ -21,6 +21,31 @@ const anularOrden = async function () {
   
 }
 
+const cambiarParametro = async function () {
+  const ruta = "actions/params"
+
+  let paramKeys = document.getElementById("parameter-key");
+  let selected = paramKeys.options[paramKeys.selectedIndex].value;
+
+  let value = document.getElementById("parameter-value").value
+
+  console.log(`Actualizando el parametro de key ${selected} al nuevo valor de  ${value}`)
+
+  const data = {
+    key: selected,
+    value: parseInt(value, 10)
+  };
+
+  const respuesta = await postData(`${baseApi}/${ruta}`, data).then(
+    (answer) => {
+      return answer;
+    }
+  );
+  console.log(respuesta);
+
+
+}
+
 const cambiarRanking = async function () {
   const ruta = "groups/ranking"
 
@@ -196,4 +221,4 @@ async function postData(url = "", data = {}) {
   });
 }
 
-export { cocinar, moverBodegas, pedir, moverAlmacenes , despachar, anularOrden, cambiarRanking};
+export { cocinar, moverBodegas, pedir, moverAlmacenes , despachar, anularOrden, cambiarRanking, cambiarParametro};

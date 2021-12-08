@@ -55,6 +55,11 @@
             <button id="refresh_groups">Refresh Groups</button>
             <div id="all_groups">All Groups</div>
         </div>
+        <div id="parameters">
+          <h2>Parameters</h2>
+          <button id="refresh_parameters">Refresh Parameters</button>
+          <div id="all_parameters">All Parameters</div>
+      </div>
         <div id="external-oc" >
           <h2>Orders (external) </h2>
           <button id="refresh_orders_external">Refresh external orders</button>
@@ -113,9 +118,7 @@
           OrdenId: <input type="number" id="despachar-order">
           <br>
           <button id="despachar">Despachar</button>
-          <br>
-          <br>
-          
+          <br>  
           <h2>Cambiar Ranking (groupId, newRanking)</h2>
           Cantidad: <input type="number" id="ranking-cantidad">
           <br>
@@ -123,6 +126,12 @@
           <br>
           <button id="ranking">Cambiar Ranking</button>
           <br>
+          <h2>Cambiar Parametro (key, newValue)</h2>
+          Param key: <select class="parameter-opciones" id="parameter-key"></select>
+          <br>
+          New Value: <input type="number" id="parameter-value">
+          <br>
+          <button id="parameter">Cambiar Parametro</button>
         </div>
     </div>
   <script type="module" src="dashboard.js"></script>
