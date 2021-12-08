@@ -1,7 +1,7 @@
 import { baseApi } from "./utils.js";
 
 const anularOrden = async function () {
-  const ruta = "ordenes-compra/anular"
+  const ruta = "ordenes-compra/anular/orden"
 
   let orderId = document.getElementById("anular-orderid").value
   let razon = document.getElementById("anular-razon").value
@@ -9,7 +9,7 @@ const anularOrden = async function () {
   console.log(`Anulando la orden de id ${orderId} porque ${razon}`)
 
   const data = {
-    id: parseInt(orderId, 10),
+    id: orderId,
     anulacion: razon
   };
   const respuesta = await postData(`${baseApi}/${ruta}`, data).then(
