@@ -32,18 +32,14 @@
           <h1>Dashboard Taller de Integración</h1>
           <div id="orders" >
               <h2>Orders (internal) </h2>
-              <button id="refresh_orders_internal">Load/Refresh orders</button>
-              <button id="filter_orders_internal">Filter accepted inProcess</button>
-              <button id="unfilter_orders_internal">Show all Orders</button>
+              FILTRO: <select class="filter-opciones" id="orders-filter"></select>
+
+              <button id="refresh_orders_internal">Load</button>
+              <!-- <button id="filter_orders_internal">Filter accepted inProcess</button>
+              <button id="unfilter_orders_internal">Show all Orders</button> -->
               <!-- <button id="new_order">New order</button> -->
-              <div id="all_orders_internal" class="orders">No disponible</div>
+              <div id="all_orders_internal" class="orders">Orders</div>
           </div>
-          <div id="external-oc" >
-            <h2>Orders (external) </h2>
-            <button id="refresh_orders_external">Refresh external orders</button>
-            <!-- <button id="new_order">New order</button> -->
-            <div id="all_orders_external" class="orders">No disponible</div>
-        </div>
           <div id="stocks">
               <h2>Stocks</h2>
               <button id="refresh_stocks">Refresh Stock</button>
@@ -59,6 +55,12 @@
             <button id="refresh_groups">Refresh Groups</button>
             <div id="all_groups">All Groups</div>
         </div>
+        <div id="external-oc" >
+          <h2>Orders (external) </h2>
+          <button id="refresh_orders_external">Refresh external orders</button>
+          <!-- <button id="new_order">New order</button> -->
+          <div id="all_orders_external" class="orders">Orders</div>
+      </div>
         </div>
         <div class="actions">
           <h1>Acciones </h1>
