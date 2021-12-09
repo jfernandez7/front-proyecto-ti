@@ -246,7 +246,7 @@ const despachar = async function () {
     quantity: parseInt(cantidad, 10),
     price: parseInt(price, 10),
     direction: direction,
-    orderId: parseInt(orden, 10)
+    orderId: orden
   };
 
   const respuesta = await postData(`${baseApi}/${ruta}`, data).then((data) => {
