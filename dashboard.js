@@ -251,10 +251,10 @@ const filterOrders = async function () {
     orders.sort(compareStatus);
 
     const newTable = document.createElement('table')
-    const partialTable = document.createElement('table')
+    // const partialTable = document.createElement('table')
     const headersElement = document.createElement('tr')
 
-    const partialHeadersElement = document.createElement('tr')
+    // const partialHeadersElement = document.createElement('tr')
 
     const headers = ["id", "orderId", "state", "inProcess", "createdByUs", "sku", "quantity", "quantityDelivered", "cookedQuantity", "createdAt", "updatedAt", "deliveryDate", "urlNotification", "channel", "client", "supplier"]
 
@@ -263,12 +263,12 @@ const filterOrders = async function () {
         header.innerHTML = headers[i]
         headersElement.appendChild(header)
 
-        const header2 = document.createElement('th')
-        header2.innerHTML = headers[i]
-        partialHeadersElement.appendChild(header2)
-    }
+        // const header2 = document.createElement('th')
+        // header2.innerHTML = headers[i]
+        // partialHeadersElement.appendChild(header2)
+    }    
     newTable.appendChild(headersElement)
-    partialTable.appendChild(partialHeadersElement)
+    // partialTable.appendChild(partialHeadersElement)
 
     for (let index = 0; index < orders.length; index ++){
         let line = document.createElement('tr');
