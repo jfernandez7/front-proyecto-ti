@@ -191,7 +191,7 @@ const fillDropDowns = async function () {
   for (var i = 0; i < recepciones.length; i++) {
     let select = recepciones[i];
 
-    for (const val of Object.entries(groupsDev)) {
+    for (const val of Object.entries(groupsProd)) {
       var option = document.createElement("option");
       option.value = val[1];
       option.text = `${val[1]} (${val[0]})`;
