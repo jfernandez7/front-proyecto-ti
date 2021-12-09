@@ -46,6 +46,42 @@ const cambiarParametro = async function () {
 
 }
 
+const crearOC = async function () {
+
+  // Group: <select class="group-opciones" id="create-oc-group"></select>
+  // <br>
+  // Quantity: <input type="number" id="create-oc-quantity">
+  // <br>
+  // SKU: <select class="sku-opciones-chicas" id="create-oc-sku"></select>
+
+  const ruta = "actions/create-order"
+
+  let groupNumbers = document.getElementById("create-oc-group");
+  let selectedGroup = groupNumbers.options[groupNumbers.selectedIndex].value;
+
+  let quantity = document.getElementById("create-oc-quantity").value
+
+  let skus = document.getElementById("create-oc-sku");
+  let selectedSku = skus.options[skus.selectedIndex].value;
+
+
+
+  console.log(`Creando OC a grupo ${selectedGroup} por una cantidad ${quantity} del sku ${selectedSku}`)
+
+  const data = {
+    group: parseInt(selectedGroup, 10),
+    sku: parseInt(selectedSku, 10),
+    quantity: parseInt(quantity, 10),
+  };
+
+  const respuesta = await postData(`${baseApi}/${ruta}`, data).then(
+    (answer) => {
+      return answer;
+    }
+  );
+  console.log(respuesta);
+}
+
 const cambiarRanking = async function () {
   const ruta = "groups/ranking"
 
@@ -221,4 +257,4 @@ async function postData(url = "", data = {}) {
   });
 }
 
-export { cocinar, moverBodegas, pedir, moverAlmacenes , despachar, anularOrden, cambiarRanking, cambiarParametro};
+export { cocinar, moverBodegas, pedir, moverAlmacenes , despachar, anularOrden, cambiarRanking, cambiarParametro, crearOC};

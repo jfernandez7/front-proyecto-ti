@@ -1,5 +1,5 @@
 import { names, baseApi, compareNombres, compareStatus, compareKey, warehousesNames, recipes, groupsDev, groupsProd, fillDropDowns, compareGroups } from "./utils.js"
-import { cocinar, despachar, pedir, moverAlmacenes, moverBodegas, anularOrden , cambiarRanking, cambiarParametro} from "./actions.js";
+import { cocinar, despachar, pedir, moverAlmacenes, moverBodegas, anularOrden , cambiarRanking, cambiarParametro, crearOC} from "./actions.js";
 const allOrdersInternal = document.getElementById('all_orders_internal');
 const allOrdersExternal = document.getElementById('all_orders_external');
 const allStocks = document.getElementById('all_stocks');
@@ -23,6 +23,7 @@ const pedirButton = document.getElementById('pedir');
 const despacharButton = document.getElementById('despachar');
 const rankingButton = document.getElementById('ranking');
 const cambiarParametroButton = document.getElementById('parameter')
+const crearOCButton = document.getElementById('crear-oc')
 
 
 const refreshParameters = async function () {
@@ -212,8 +213,9 @@ const refreshExternalOrders = async function () {
 }
 
 const filterOrders = async function () {
+    console.log("Filtrando ordenes internas")
 
-    const opciones = ["B2B todo", "FTP todo", "B2B aceptadas inProcess", "FTP aceptadas inProcess", "Todo aceptadas inProcess", "Todas"]
+    const opciones = ["B2B todo", "B2B nuestras", "B2B externas", "B2B aceptadas inProcess", "FTP todo", "FTP aceptadas inProcess", "Todo aceptadas inProcess", "Todas" ]
 
 
     const ordersRequest = await fetch(`${baseApi}/ordenes-compra/internal`)
@@ -231,14 +233,18 @@ const filterOrders = async function () {
     if (selectedFilter == opciones[0]){
         orders = orders.filter((order) => order.channel == "b2b")
     } else if (selectedFilter == opciones[1]){
-        orders = orders.filter((order) => order.channel == "ftp")
+        orders = orders.filter((order) => order.channel == "b2b" && order.createdByUs == true)
     } else if (selectedFilter == opciones[2]){
-        orders = orders.filter((order) => order.channel == "b2b" && order.state == "aceptada" && order.inProcess == true)
+        orders = orders.filter((order) => order.channel == "b2b" && order.createdByUs == false)
     } else if (selectedFilter == opciones[3]){
-        orders = orders.filter((order) => order.channel == "ftb" && order.state == "aceptada" && order.inProcess == true)
+        orders = orders.filter((order) => order.channel == "b2b" && order.state == "aceptada" && order.inProcess == true)
     } else if (selectedFilter == opciones[4]){
+        orders = orders.filter((order) => order.channel == "ftp")
+    }  else if (selectedFilter == opciones[5]){
+        orders = orders.filter((order) => order.channel == "ftp" && order.state == "aceptada" && order.inProcess == true)
+    } else if (selectedFilter == opciones[6]){
         orders = orders.filter((order) => order.state == "aceptada" && order.inProcess == true)
-    }
+    } 
 
     allOrdersInternal.innerHTML = ""; 
 
@@ -501,6 +507,7 @@ pedirButton.onclick = pedir;
 despacharButton.onclick = despachar;
 rankingButton.onclick = cambiarRanking;
 cambiarParametroButton.onclick = cambiarParametro;
+crearOCButton.onclick = crearOC;
 
 
 refreshOrdersButton.onclick = filterOrders;

@@ -198,7 +198,7 @@ const fillDropDowns = async function () {
   }
 
   // Filters
-  const opciones = ["B2B todo", "FTP todo", "B2B aceptadas inProcess", "FTP aceptadas inProcess", "Todo aceptadas inProcess", "Todas"]
+  const opciones = ["B2B todo", "B2B nuestras", "B2B externas", "B2B aceptadas inProcess", "FTP todo", "FTP aceptadas inProcess", "Todo aceptadas inProcess", "Todas" ]
   for (var i = 0; i < filter.length; i++) {
     let select = filter[i];
 
