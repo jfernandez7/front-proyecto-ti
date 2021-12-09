@@ -109,22 +109,39 @@ const cambiarRanking = async function () {
 
 
 const moverBodegas = async function () {
+
+  // <h2>B2B -> Mover a bodega (cantidad, SKU, destino, OC)</h2>
+  // Cantidad: <input type="number" id="bodegas-cantidad">
+  // <br>
+  // SKU: <select class="sku-opciones" id="bodegas-sku"></select>
+  // <br>
+  // Destino: <select class="recepcion-opciones" id="bodegas-destino"></select>
+  // <br>
+  // Id OC: <input type="text" id="bodegas-oc">
+  // <br>
+
   const ruta = "actions/moveStorage";
 
   let cantidad = document.getElementById("bodegas-cantidad").value;
+
   let skus = document.getElementById("bodegas-sku");
   let selected = skus.options[skus.selectedIndex].value;
+
   let destinos = document.getElementById("bodegas-destino");
   let destino = destinos.options[destinos.selectedIndex].value;
 
+  let orderId = document.getElementById("bodegas-oc").value;
+
+
   console.log(
-    `Moviendo ${cantidad} cantidad del sku ${selected} desde despacho a destino ${destino}`
+    `Moviendo ${cantidad} cantidad del sku ${selected} desde despacho a destino ${destino} por la orden ${orderId}`
   );
 
   const data = {
     sku: parseInt(selected, 10),
     quantity: parseInt(cantidad, 10),
     destination: destino,
+    orderId
   };
 
   const respuesta = await postData(`${baseApi}/${ruta}`, data).then(

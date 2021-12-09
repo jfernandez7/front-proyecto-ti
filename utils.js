@@ -94,6 +94,7 @@ const groupsProd = {
   "Grupo 17": "618332b7736b2300048b21d0",
 };
 
+
 const recipes = {
   1000: "Masa para pizza precocida familiar",
   1001: "Masa para pizza precocida mediana",
@@ -183,6 +184,20 @@ const fillDropDowns = async function () {
   var groups = document.getElementsByClassName("group-opciones")
   var filter = document.getElementsByClassName("filter-opciones");
   var parameters = document.getElementsByClassName("parameter-opciones")
+  var recepciones = document.getElementsByClassName("recepcion-opciones")
+
+
+  // Ids recepcion
+  for (var i = 0; i < recepciones.length; i++) {
+    let select = recepciones[i];
+
+    for (const val of Object.entries(groupsDev)) {
+      var option = document.createElement("option");
+      option.value = val[1];
+      option.text = `${val[1]} (${val[0]})`;
+      select.appendChild(option);
+    }
+  }
 
 
   // Groups
@@ -267,6 +282,8 @@ const fillDropDowns = async function () {
       select.appendChild(option);
     }
   }
+
+  
 
   const allParameters = await fetch(`${baseApi}/actions/params`)
   .then(response => response.json())

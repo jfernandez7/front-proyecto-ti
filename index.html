@@ -67,11 +67,6 @@
           <button id="refresh_parameters">Refresh Parameters</button>
           <div id="all_parameters">All Parameters</div>
       </div>
-        <div id="external-oc" >
-          <h2>Orders (external) </h2>
-          <button id="refresh_orders_external">Refresh external orders</button>
-          <!-- <button id="new_order">New order</button> -->
-          <div id="all_orders_external" class="orders">Orders</div>
       </div>
         </div>
         <div class="actions">
@@ -117,12 +112,14 @@
           <button id="cocinar">Cocinar</button>
           <br>
           
-          <h2>Mover a bodega (cantidad, SKU, destino)</h2>
+          <h2>B2B -> Mover a bodega (cantidad, SKU, destino, OC)</h2>
           Cantidad: <input type="number" id="bodegas-cantidad">
           <br>
           SKU: <select class="sku-opciones" id="bodegas-sku"></select>
           <br>
-          Destino: <select class="destino-opciones" id="bodegas-destino"></select>
+          Destino: <select class="recepcion-opciones" id="bodegas-destino"></select>
+          <br>
+          Id OC: <input type="text" id="bodegas-oc">
           <br>
           <button id="mover-bodega">MOVER BODEGAS</button>
           <br>
@@ -149,6 +146,13 @@
           New Value: <input type="number" id="parameter-value">
           <br>
           <button id="parameter">Cambiar Parametro</button>
+        </div>
+        <div class="dashboard">
+          <div id="external-oc" >
+            <h2>Orders (external) </h2>
+            <button id="refresh_orders_external">Refresh external orders</button>
+            <!-- <button id="new_order">New order</button> -->
+            <div id="all_orders_external" class="orders">Orders</div>
         </div>
     </div>
   <script type="module" src="dashboard.js"></script>
