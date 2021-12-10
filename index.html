@@ -72,7 +72,8 @@
         <div class="actions">
           <h1>Acciones </h1>
           <br>
-          <h2>Crear Orden (key, newValue)</h2>
+
+          <h2>Crear Orden B2B a otro grupo (key, newValue)</h2>
           Group: <select class="group-opciones" id="create-oc-group"></select>
           <br>
           Quantity: <input type="number" id="create-oc-quantity">
@@ -81,6 +82,14 @@
           <br>
           <button id="crear-oc">Crear OC</button>
           <br>
+
+          <h2>Reset orden local (key, newValue)</h2>
+          <h5>CookedQuantity a null, estado acorde al servicio, dispatchedQuantity acorde al servicio e inProcess a false.</h5>
+          orderId: <input type="text" id="reset-oc"></select>
+          <br>
+          <button id="reset">Crear OC</button>
+          <br>
+
           <h2>Anular/Cancelar Orden (orderId)</h2>
           orderId: <input type="text" id="anular-orderid">
           <br>
@@ -88,14 +97,18 @@
           <br>
           <button id="anular">ANULAR</button>
           <br>
-          <h2>Pedir (cantidad, SKU)</h2>
+
+
+          <h2>Pedir abastecimiento (cantidad, SKU)</h2>
           Cantidad: <input type="number" id="pedir-cantidad">
           <br>
           SKU: <select class="sku-opciones-chicas" id="pedir-sku"></select>
           <br>
           <button id="pedir">PEDIR</button>
           <br>
-          <h2>Mover entre almacenes(cantidad, SKU, origen, destino)</h2>
+
+
+          <h2>Mover entre almacenes internos (cantidad, SKU, origen, destino)</h2>
           Cantidad: <input type="number" id="mover-cantidad">
           <br>
           SKU: <select class="sku-opciones" id="mover-sku"></select>
@@ -106,12 +119,54 @@
           <br>
           <button id="mover-almacenes">MOVER ALMACENES</button>
           <br>
+
+
           <h2>Cocinar (sku) </h2>
           SKU: <select class="recipe-opciones" id="cocinar-sku"></select>
           <br>
           <button id="cocinar">Cocinar</button>
           <br>
+
+          <h2>B2B -> Forzar despacho (sku, quantity, destination, oc)</h2>
+          Cantidad: <input type="number" id="force-cantidad">
+          <br>
+          SKU: <select class="sku-opciones" id="force-sku"></select>
+          <br>
+          Destino: <select class="recepcion-opciones" id="force-destino"></select>
+          <br>
+          Id OC: <input type="text" id="force-oc">
+          <br>
+          <button id="force-despacho">MOVER BODEGAS</button>
+          <br>
+
+          <h2>Cambiar Ranking (groupId, newRanking)</h2>
+          Cantidad: <input type="number" id="ranking-cantidad">
+          <br>
+          Group: <select class="group-opciones" id="ranking-group"></select>
+          <br>
+          <button id="ranking">Cambiar Ranking</button>
+          <br>
+
+
+          <h2>Cambiar Parametro (key, newValue)</h2>
+          Param key: <select class="parameter-opciones" id="parameter-key"></select>
+          <br>
+          New Value: <input type="number" id="parameter-value">
+          <br>
+          <button id="parameter">Cambiar Parametro</button>
+
           
+          <h2>FTP Despachar (orderId, cantidad, SKU, direction, price)</h2>
+          Cantidad: <input type="number" id="despachar-cantidad">
+          <br>
+          SKU: <select class="sku-opciones" id="despachar-sku"></select>
+          <br>
+          OrdenId: <input type="text" id="despachar-order">
+          <br>
+          <button id="despachar">Despachar</button>
+          <br>  
+
+          <h1>OBSOLETO NO USAR </h1>
           <h2>B2B -> Mover a bodega (cantidad, SKU, destino, OC)</h2>
           Cantidad: <input type="number" id="bodegas-cantidad">
           <br>
@@ -123,29 +178,6 @@
           <br>
           <button id="mover-bodega">MOVER BODEGAS</button>
           <br>
-          
-          <h2>Despachar (orderId, cantidad, SKU, direction, price)</h2>
-          Cantidad: <input type="number" id="despachar-cantidad">
-          <br>
-          SKU: <select class="sku-opciones" id="despachar-sku"></select>
-          <br>
-          OrdenId: <input type="text" id="despachar-order">
-          <br>
-          <button id="despachar">Despachar</button>
-          <br>  
-          <h2>Cambiar Ranking (groupId, newRanking)</h2>
-          Cantidad: <input type="number" id="ranking-cantidad">
-          <br>
-          Group: <select class="group-opciones" id="ranking-group"></select>
-          <br>
-          <button id="ranking">Cambiar Ranking</button>
-          <br>
-          <h2>Cambiar Parametro (key, newValue)</h2>
-          Param key: <select class="parameter-opciones" id="parameter-key"></select>
-          <br>
-          New Value: <input type="number" id="parameter-value">
-          <br>
-          <button id="parameter">Cambiar Parametro</button>
         </div>
         <div class="dashboard">
           <div id="external-oc" >

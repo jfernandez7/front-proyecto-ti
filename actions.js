@@ -105,6 +105,40 @@ const cambiarRanking = async function () {
   
 }
 
+const forzarDespachoB2B = async function () {
+
+    const ruta = "actions/forceDispatch";
+
+    let cantidad = document.getElementById("force-cantidad").value;
+  
+    let skus = document.getElementById("force-sku");
+    let selected = skus.options[skus.selectedIndex].value;
+  
+    let destinos = document.getElementById("force-destino");
+    let destino = destinos.options[destinos.selectedIndex].value;
+  
+    let oc = document.getElementById("force-oc").value;
+  
+  
+    console.log(
+      `Forzando el despacho de ${cantidad} unidades del sku ${selected} desde nuestro despacho a destino ${destino} por la orden ${oc}`
+    );
+  
+    const data = {
+      sku: parseInt(selected, 10),
+      quantity: parseInt(cantidad, 10),
+      destination: destino,
+      oc
+    };
+  
+    const respuesta = await postData(`${baseApi}/${ruta}`, data).then(
+      (answer) => {
+        return answer;
+      }
+    );
+    console.log(respuesta);
+  
+}
 
 
 
@@ -224,6 +258,23 @@ const cocinar = async function () {
   console.log(respuesta);
 };
 
+const resetOC = async function () {
+
+  let oc = document.getElementById("reset-oc").value;
+
+  const ruta = "ordenes-compra/reset/one";
+
+  console.log(`Reseteando la orden con id ${oc}`);
+
+  const data = {
+    id: oc
+  };
+  const respuesta = await postData(`${baseApi}/${ruta}`, data).then((data) => {
+    return data;
+  });
+  console.log(respuesta);
+};
+
 
 const despachar = async function () {
   let sku = document.getElementById("despachar-sku");
@@ -274,4 +325,4 @@ async function postData(url = "", data = {}) {
   });
 }
 
-export { cocinar, moverBodegas, pedir, moverAlmacenes , despachar, anularOrden, cambiarRanking, cambiarParametro, crearOC};
+export { cocinar, moverBodegas, pedir, moverAlmacenes , despachar, anularOrden, cambiarRanking, cambiarParametro, crearOC, forzarDespachoB2B, resetOC};

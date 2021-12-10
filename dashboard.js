@@ -1,5 +1,5 @@
 import { names, baseApi, compareNombres, compareStatus, compareKey, warehousesNames, recipes, groupsDev, groupsProd, fillDropDowns, compareGroups } from "./utils.js"
-import { cocinar, despachar, pedir, moverAlmacenes, moverBodegas, anularOrden , cambiarRanking, cambiarParametro, crearOC} from "./actions.js";
+import { cocinar, despachar, pedir, moverAlmacenes, moverBodegas, anularOrden , cambiarRanking, cambiarParametro, crearOC, forzarDespachoB2B, resetOC} from "./actions.js";
 const allOrdersInternal = document.getElementById('all_orders_internal');
 const allOrdersExternal = document.getElementById('all_orders_external');
 const allStocks = document.getElementById('all_stocks');
@@ -24,7 +24,8 @@ const despacharButton = document.getElementById('despachar');
 const rankingButton = document.getElementById('ranking');
 const cambiarParametroButton = document.getElementById('parameter')
 const crearOCButton = document.getElementById('crear-oc')
-
+const forzarDespachoButton = document.getElementById('force-despacho')
+const resetOCButton = document.getElementById('reset');
 
 const refreshParameters = async function () {
     console.log("Actualizando parametros")
@@ -508,6 +509,8 @@ despacharButton.onclick = despachar;
 rankingButton.onclick = cambiarRanking;
 cambiarParametroButton.onclick = cambiarParametro;
 crearOCButton.onclick = crearOC;
+forzarDespachoButton.onclick = forzarDespachoB2B;
+resetOCButton.onclick = resetOC;
 
 
 refreshOrdersButton.onclick = filterOrders;
